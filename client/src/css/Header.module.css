@@ -1,0 +1,13 @@
+Header{
+    height: 80px;
+    background: rgb(219,75,75);
+    background: linear-gradient(176deg, rgba(219,75,75,1) 0%, rgba(249,126,13,1) 43%, rgba(255,217,0,1) 100%); 
+}
+nav{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+img{
+    height: 80px;
+}
