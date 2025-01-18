@@ -6,7 +6,7 @@ const profileLink='https://th.bing.com/th/id/OIP.vdD39cB3cym2j2UDFvjRXgAAAA?rs=1
 
 const Header = () => {
   return (
-    <header>
+    <header className={styles.header}>
       <nav>
         <div className={styles.left}>
           <Link to="/" style={{ textDecoration: 'none' }}>
