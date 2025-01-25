@@ -13,10 +13,12 @@ nav{
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 100%;
     padding: 5px;;
 }
 .right{
     display: flex;
+    height: 100%;
     flex-direction: row;
     align-items: center;
     width: max-content;
@@ -28,7 +30,7 @@ nav{
     text-decoration: none;
 }
 img{
-    height: 7vh;
+    height: 100%;
     border-radius: 50%;
     align-items: center;
     margin-left: 5vw;
