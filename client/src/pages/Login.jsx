@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import style from '../css/Signup.module.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {start, failure, success} from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -64,7 +64,7 @@ const Login = () =>{
             <span class='text-red-500 text-xl font-semibold'>{error}</span>
             <span className={style.or}>or</span>
             <div className={style.OAuth}>google</div>
-            <span className={style.moveToSignin}>Already have an account!</span>
+            <span className={style.moveToSignin}><Link to={'/auth/signup'}>create an account!</Link></span>
         </div>
     )
 }
