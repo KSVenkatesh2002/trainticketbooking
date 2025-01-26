@@ -3,6 +3,6 @@ import {deleteUser, test, updateUser} from '../controller/user.controller.js'
 
 const router = express.Router()
 router.get('/test',test)
-router.get('/update',updateUser)
-router.get('/delete',deleteUser)
+router.post('/update',updateUser)
+router.delete('/delete',deleteUser)
 export default router

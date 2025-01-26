@@ -6,7 +6,8 @@ export const signup = async (req,res,next) =>{
     const {username, dob, email, password } = req.body
     const validUsername = await User.findOne({username})
     const validEmail = await User.findOne({email})
-    if(validUsername || validEmail) return next(errorHandler(404,'you already have an account'))
+    if(validUsername) return next(errorHandler(404,'username not available'))
+    if(validEmail) return next(errorHandler(404,'email already exist'))
     try{
         const hashedpassword = bcryptjs.hashSync(password, 10);
         const newUser = new User({username,dob,email,password: hashedpassword})
