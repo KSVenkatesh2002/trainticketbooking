@@ -1,10 +1,17 @@
-import React, { Profiler } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Profiler, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styles from '../css/Header.module.css'
 
 const profileLink = 'https://th.bing.com/th/id/OIP.vdD39cB3cym2j2UDFvjRXgAAAA?rs=1&pid=ImgDetMain';
 
 const Header = () => {
+    const location = useLocation();
+
+    let [authStyle,setAuthStyle] = useState({display: 'block'});
+    useEffect(() => {
+        const url = location.pathname;
+        setAuthStyle(url.includes('auth') ? {display: 'none'} : {display: 'block'})
+    }, [location.pathname])
     return (
         <header className={styles.header}>
             <nav>
@@ -14,8 +21,8 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className={styles.right}>
-                    <span><Link to="/auth/signup" style={{ textDecoration: 'none' }}>Signup</Link></span>
-                    <span><Link to="/auth/login" style={{ textDecoration: 'none' }}>Login</Link></span>
+                    <span style={authStyle}><Link to="/auth/signup" >Signup</Link></span>
+                    <span style={authStyle}><Link to="/auth/login" >Login</Link></span>
                     <img src={profileLink} alt="profile" />
 
                 </div>
