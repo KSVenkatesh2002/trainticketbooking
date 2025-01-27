@@ -22,7 +22,8 @@ nav{
     flex-direction: row;
     align-items: center;
     width: max-content;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 500;
     text-decoration: none;
 }
 .right span:nth-child(2){
@@ -35,4 +36,8 @@ img{
     align-items: center;
     margin-left: 5vw;
     background-size: cover;
+}
+.left{
+    font-weight: bold;
+    font-size: 2rem ;
 }
