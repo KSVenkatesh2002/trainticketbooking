@@ -36,13 +36,15 @@ const Auth = () => {
             <header className="w-full h-[11vh] min-h-[70px] rounded-b-[50px] bg-gradient-to-br from-[rgba(245,227,190,0.5)] via-[rgba(233,182,139,0.55)] to-[rgba(254,188,116,0.55)] flex justify-evenly items-end">
                 <h2 
                     onClick={() => handlePageChange('signup')} 
-                    className={`mb-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-300 ${showLogin ? '' : 'border-b-4 border-black'}`}
+                    className={`font-semibold mb-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-300 
+                    ${showLogin ? 'text-sm' : 'text-lg border-b-4 border-black'}`}
                 >
                     Sign Up
                 </h2>
                 <h2 
                     onClick={() => handlePageChange('login')} 
-                    className={`mb-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-300 ${showLogin ? 'border-b-4 border-black' : ''}`}
+                    className={`font-semibold mb-2 px-4 py-2 rounded-md cursor-pointer transition-all duration-300 
+                    ${showLogin ? 'border-b-4 border-black text-lg' : 'text-sm'}`}
                 >
                     Login
                 </h2>
