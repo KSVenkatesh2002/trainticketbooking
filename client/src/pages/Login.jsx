@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import style from '../css/Signup.module.css'
 import { useNavigate, Link } from 'react-router-dom';
 import {start, failure, success} from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../component/OAuth'
 
 const Login = () =>{
     const navigate = useNavigate()
@@ -12,7 +13,7 @@ const Login = () =>{
 
 
     const handlechange = (e) => {
-        setformdata({...formdata, [e.target.id] : e.target.value})
+        setformdata({...formdata, [e.target.name] : e.target.value})
     }
     const handlesubmit = async (e) => {
         dispatch(start())
@@ -39,7 +40,7 @@ const Login = () =>{
                 <label htmlFor="username"> name</label>         
                     <input 
                         type="text" 
-                        name="username" id="username" 
+                        name="username" 
                         value={formdata.username} 
                         placeholder='username' 
                         required 
@@ -49,7 +50,6 @@ const Login = () =>{
                     <input 
                         type="password" 
                         name="password" 
-                        id="password" 
                         value={formdata.password} 
                         placeholder='password' 
                         required 
@@ -61,9 +61,9 @@ const Login = () =>{
                     type="submit" 
                     value={loading && 'loading' || 'login'}/>
             </form>
-            <span class='text-red-500 text-xl font-semibold'>{error}</span>
+            <span className='text-red-500 text-xl font-semibold'>{error}</span>
             <span className={style.or}>or</span>
-            <div className={style.OAuth}>google</div>
+            <OAuth/>
             <span className={style.moveToSignin}><Link to={'/auth/signup'}>create an account!</Link></span>
         </div>
     )

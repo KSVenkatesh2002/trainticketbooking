@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import style from '../css/Signup.module.css'
 import {start, failure, success} from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../component/OAuth'
 
 const Signup = () =>{
     const currentD = new Date();
@@ -11,11 +12,12 @@ const Signup = () =>{
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [formdata,setformdata] = useState({})
+    const [formdata,setformdata] = useState({dob:max})
     const {loading, error} = useSelector((state)=> state.user)
 
     const handlechange = (e) => {
-        setformdata({...formdata, [e.target.id] : e.target.value})
+        setformdata({...formdata, [e.target.name] : e.target.value})
+        console.log(formdata)
     }
     const handlesubmit = async (e) => {
         e.preventDefault();
@@ -46,7 +48,6 @@ const Signup = () =>{
                     <input 
                         type="text" 
                         name="username" 
-                        id="username" 
                         value={formdata.username} 
                         placeholder='username' 
                         required 
@@ -56,7 +57,6 @@ const Signup = () =>{
                     <input 
                         type="email" 
                         name="email" 
-                        id="email" 
                         value={formdata.email}
                         placeholder='email' 
                         required 
@@ -66,7 +66,6 @@ const Signup = () =>{
                     <input 
                         type="date" 
                         name="dob" 
-                        id="dob"  
                         max={max} 
                         value={formdata.dob}
                         required 
@@ -74,8 +73,7 @@ const Signup = () =>{
                 <label htmlFor="password"> password</label> 
                     <input 
                         type="password" 
-                        name="password" 
-                        id="password" 
+                        name="password"
                         value={formdata.password} 
                         placeholder='password'
                         required 
@@ -88,7 +86,7 @@ const Signup = () =>{
             </form>
             <span>{error}</span>
             <span className={style.or}>or</span>
-            <div className={style.OAuth}>google</div>
+            <OAuth/>
             <span className={style.moveToSignin}><Link to={'/auth/login'}>Already have an account!</Link></span>
         </div>
     )
