@@ -34,7 +34,7 @@ const Header = () => {
                     </span> 
                     : <span className={styles.profile}>
                         <Link to="/profile">
-                            <img src={currentUser.photoURL || profileLink } alt="profile"/> 
+                            <img className={styles.imgTag} src={currentUser.photoURL || profileLink } alt="profile"/> 
                         </Link>
                     </span>}
                     

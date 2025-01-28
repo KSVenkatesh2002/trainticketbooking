@@ -36,7 +36,7 @@ const Login = () =>{
     return(
         <div className={style.signup}>
             <h2>Login into An Account</h2>
-            <form onSubmit={handlesubmit}>
+            <form onSubmit={(e)=>handlesubmit(e)}>
                 <label htmlFor="username"> name</label>         
                     <input 
                         type="text" 

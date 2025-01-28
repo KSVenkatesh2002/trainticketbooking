@@ -35,7 +35,7 @@ const Signup = () =>{
             dispatch(failure(data.message))
             return;
         }
-        navigate('/')
+        navigate('/auth/login')
         dispatch(success(data.other))
     }
 
@@ -43,7 +43,7 @@ const Signup = () =>{
         <div className={style.signup}>
             
             <h2>Create An Account</h2>
-            <form onSubmit={handlesubmit}>
+            <form onSubmit={(e)=>handlesubmit(e)}>
                 <label htmlFor="username"> name</label>         
                     <input 
                         type="text" 
