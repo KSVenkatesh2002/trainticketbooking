@@ -63,7 +63,6 @@ export const OAuth = async (req,res,next) =>{
         }
         else{
             const generatedRandomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
-            console.log(generatedRandomPassword)
             const newUser = new User({
                 username:username + Math.floor(Math.random()*10000).toString(),
                 dob,
@@ -85,4 +84,9 @@ export const OAuth = async (req,res,next) =>{
     }catch(error){
         next(error)
     }
+}
+
+export const signout = async (req,res,next) =>{
+    res.clearCookie('access_token')
+    res.status(200).json({message:'signout successfully'})
 }

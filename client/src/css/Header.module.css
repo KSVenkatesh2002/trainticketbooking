@@ -22,13 +22,16 @@ nav{
     flex-direction: row;
     align-items: center;
     width: max-content;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 500;
     text-decoration: none;
 }
-.right span:nth-child(2){
-    margin-left: 3vw;
+.right span{
+    margin-left: 2vw;
     text-decoration: none;
+}
+.profile{
+    height: 100%;
 }
 img{
     height: 100%;

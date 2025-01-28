@@ -4,6 +4,7 @@
     justify-content: flex-start;
     align-items: center;
     width: 100vw;
+    height: 92vh;
 }
 
 form{
@@ -20,7 +21,7 @@ input{
     height: 6vh;
     width: 70vw;
     max-width: 400px;
-    min-height: 35px;    
+    min-height: 40px;    
     border: 2px dotted black;
     border-radius: 8px;
     background: rgb(255,173,0);
@@ -39,6 +40,7 @@ input[type="submit"].submitbtn{
     color: white;
     cursor: pointer;
 }
+
 span.or{
     margin: 5px;
     height: max-content;
@@ -84,3 +86,12 @@ input:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s;
 }
 
+form input.signoutbtn{
+    max-width: 200px;
+    border: 2px solid rgb(209, 2, 2);
+    border-radius: 50px;
+    background: rgb(209, 2, 2) !important;
+    color: white;
+    cursor: pointer;
+    margin-top: 15px;
+}
