@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import style from '../css/Signup.module.css'
 import { start, failure, success, signout } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -74,63 +73,72 @@ const Profile = () => {
     }
 
     return (
-        <div className='flex flex-col items-center h-[92vh] w-screen justify-center bg-gradient-to-br from-[rgba(245,227,190,0.5)] via-[rgba(233,182,139,0.55)] to-[rgba(254,188,116,0.55)]'>
-            <h2 className='mb-3.5'>Update Profile</h2>
-            <form onSubmit={(e) => handlesubmit(e)}>
-
+        <div className="flex flex-col items-center h-[92vh] w-screen justify-center bg-gradient-to-br from-[rgba(245,227,190,0.5)] via-[rgba(233,182,139,0.55)] to-[rgba(254,188,116,0.55)]">
+            <h2 className="mb-3.5 text-2xl font-semibold">Update Profile</h2>
+            <form onSubmit={handlesubmit} className="flex flex-col items-center w-full max-w-lg">
+                
                 {/* <img src={currentUser.photoURL} alt="dp" onClick={() => fileref.current.click()} className='mb-4 w-40 rounded-full bg-cover cursor-pointer' /> */}
-                <label htmlFor="username"> name</label>
+                
+                <label className="absolute left-[-1000000px]" htmlFor="username">Name</label>
                 <input
                     type="text"
                     name="username"
                     value={formdata.username}
-                    placeholder='username'
+                    placeholder="Username"
                     required
-                    onChange={(e) => handlechange(e)}
-                /><br />
-                <label htmlFor="email"> email</label>
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
+                    onChange={handlechange}
+                />
+                
+                <label className="absolute left-[-1000000px]" htmlFor="email">Email</label>
                 <input
                     type="email"
                     name="email"
                     value={formdata.email}
-                    placeholder='email'
+                    placeholder="Email"
                     required
-                    onChange={(e) => handlechange(e)}
-                /><br />
-                <label htmlFor="dob"> dob </label>
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
+                    onChange={handlechange}
+                />
+                
+                <label className="absolute left-[-1000000px]" htmlFor="dob">Date of Birth</label>
                 <input
                     type="date"
                     name="dob"
                     value={formdata.dob}
                     max={max}
                     required
-                    onChange={(e) => handlechange(e)}
-                /><br />
-                <label htmlFor="password"> password</label>
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
+                    onChange={handlechange}
+                />
+                
+                <label className="absolute left-[-1000000px]" htmlFor="password">Password</label>
                 <input
                     type="password"
                     name="password"
                     value={formdata.password}
-                    placeholder='password'
+                    placeholder="Password"
                     required
-                    onChange={(e) => handlechange(e)}
-                /><br />
-                <input
-                    style={{ background: loading ? '#b9bdcb' : '#09122C' }}
-                    className={style.submitbtn}
-                    type="submit"
-                    value={loading ? 'loading' : 'update'}
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
+                    onChange={handlechange}
                 />
+                
                 <input
-                    style={{ background: loading ? '#b9bdcb' : '#09122C' }}
-                    className={style.signoutbtn}
+                    type="submit"
+                    value={loading ? 'Loading...' : 'Update'}
+                    className={`h-[6vh] w-[70vw] max-w-[200px] min-h-[40px] border-2 rounded-full text-white cursor-pointer ${loading ? 'bg-gray-400' : 'bg-[#09122C]'}`}
+                />
+                
+                <input
                     type="button"
-                    onClick={() => handleSignout()}
-                    value={loading ? 'loading' : 'sign out'}
+                    onClick={handleSignout}
+                    value={loading ? 'Loading...' : 'Sign Out'}
+                    className={`h-[6vh] w-[70vw] max-w-[200px] min-h-[40px] border-2 rounded-full text-white cursor-pointer mt-4 ${loading ? 'bg-gray-400' : 'bg-red-600'}`}
                 />
             </form>
-            <span>{error}</span>
+
+            {error && <span className="text-red-500 text-xl font-semibold mt-4">{error}</span>}
         </div>
-    )
+    );
 }
 export default Profile

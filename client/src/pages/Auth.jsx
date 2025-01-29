@@ -49,7 +49,7 @@ const Auth = () => {
                     Login
                 </h2>
             </header>
-            <div className="relative min-w-screen max-w-md h-[500px] overflow-hidden mt-8">
+            <div className="relative min-w-screen max-w-md h-screen overflow-hidden mt-8">
                 <div 
                     className={`absolute inset-0 w-full transition-transform duration-500 ease-in-out ${showLogin ? '-translate-x-full' : 'translate-x-0'}`}
                 >

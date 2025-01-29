@@ -19,7 +19,6 @@ function App() {
                 <Route element={<PrivateRouter />}>
                     <Route path="/profile"     element={<Profile />} />
                 </Route>
-                
             </Routes>
         </BrowserRouter>
     )
