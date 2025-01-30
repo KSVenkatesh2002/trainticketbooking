@@ -6,6 +6,7 @@ import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import PrivateRouter from './component/PrivateRouter';
 import './css/App.css';
+import SearchResult from './pages/SearchResult';
 
 
 function App() {
@@ -13,12 +14,13 @@ function App() {
         <BrowserRouter>
             <Header/>
             <Routes>
-                <Route path="/"            element={<Home    />} />
-                <Route path="/about"       element={<About   />} />
-                <Route path="/auth/:types" element={<Auth    />} />
+                <Route path="/" element={<Home/>} />
+                <Route path="/about" element={<About/>} />
+                <Route path="/auth/:types" element={<Auth/>} />
                 <Route element={<PrivateRouter />}>
-                    <Route path="/profile"     element={<Profile />} />
+                    <Route path="/profile"     element={<Profile/>} />
                 </Route>
+                <Route path="/searchresult" element={<SearchResult/>} />
             </Routes>
         </BrowserRouter>
     )

@@ -45,3 +45,25 @@ export const trainUpload = async (req, res, next) => {
         next(error);
     }
 };
+
+export const trainAddressList = async (req, res, next) => {
+    const address = req.query.address;
+
+    if (!address) return res.json([]);
+    try {
+
+        // Search for stations matching the user input (case-insensitive)
+        const stations = await Station.find({
+            name: { $regex: new RegExp(address, "i") }
+        }).limit(5); // Limit results to 5 suggestionsf
+
+        res.status(200).json(stations);
+    } catch (error) {
+        console.error('Error:', error);
+        next(error);
+    }
+}
+
+export const searchResult = async (req, res, next) => {
+    
+}
