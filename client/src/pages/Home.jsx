@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 function Home() {
     const currentDate = new Date()
     const min = currentDate.toISOString().split('T')[0]
 
     const navigate = useNavigate()
+
+    const sourceRef = useRef(null)
+    const destinationRef = useRef(null)
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
@@ -16,7 +19,7 @@ function Home() {
         source,
         destination,
         date:min,
-        classes:'General'
+        classes:'sleeper'
     })
     const [result, setResult] = useState(false)
 
@@ -28,7 +31,7 @@ function Home() {
         setTimeout(() => {
             if (type === "source") setFocusedSource(false);
             else setFocusedDestination(false);
-        }, 200); // Delay allows the click event to trigger first
+        }, 500); // Delay allows the click event to trigger first
     }
 
     const handleOnChange = (e) => {
@@ -37,12 +40,18 @@ function Home() {
         console.log(searchFormData)
     }
 
-    const handleSumbit = async () => {
+    const handleSumbit = async (e) => {
+        setResult(false)
+        e.preventDefault();
         try{
-            const res= await fetch(`/api/train/search?source=${searchFormData.source}&destination=${searchFormData.destination}&date=${searchFormData.date}&classes=${searchFormData.classes}`)
-            const data = res.json()
-            if(data.success)   navigate('/searchresult')
+            const res = await fetch(`/api/train/search?source=${searchFormData.source}&destination=${searchFormData.destination}&date=${searchFormData.date}&classes=${searchFormData.classes}`)
+            const data = await res.json()
+            console.log(data)
+            if(data.success)   navigate("/searchresult", {
+                state: { trains: data.train }
+              });
             else   setResult(true)
+        
         }catch(error){
             console.log(error)
         }
@@ -65,6 +74,8 @@ function Home() {
 
     return (
         <div className="flex flex-col items-center ">
+
+            {/* intro */}
             <div className='w-screen my-10 text-center grow'>
                 <h1 className='font-bold'>Welcome to Train Ticket Booking center! 🚆</h1>
                 <p className=''>Ready to embark on your next adventure? Whether you're planning a quick getaway or a long journey, we're here to make your travel experience seamless and enjoyable. Book your tickets with ease, explore diverse destinations, and get ready to create unforgettable memories. Let's get started!</p>
@@ -73,8 +84,9 @@ function Home() {
             </div>
             <hr className='border w-screen mx-4' />
 
+            {/* form */}
             <div className='flex flex-col md:flex-row items-center w-screen'>
-                <form onSubmit={()=>handleSumbit()} className="flex flex-col w-screen max-w-[700px] md:max-w-screen p-4 grow">
+                <form onSubmit={(e)=>handleSumbit(e)} className="flex flex-col w-screen max-w-[700px] md:max-w-screen p-4 grow">
                     <h1 className="b text-5xl my-4">BOOK TICKET</h1>
 
                     {/* row1 */}
@@ -88,10 +100,10 @@ function Home() {
                                 value={source}
                                 name='source'
                                 onChange={(e) => {
+                                    console.log(e.target.value)
                                     setSource(e.target.value);
                                     fetchSuggestions(e.target.value, "source");
-                                    handleOnChange(e)
-                                }}
+                                    handleOnChange(e)}}
                                 onFocus={()=>onFocus('source')} onBlur={()=>onBlur('source')}
                                 className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl" 
                             /> 
@@ -102,8 +114,8 @@ function Home() {
                                 <li key={station._id} 
                                     onClick={()=> {
                                         setSource(station.name); 
-                                        setSourceSuggestions([])}}
-                                >
+                                        setSourceSuggestions([]);
+                                        setSearchFormData({...searchFormData,source:station.name})}}>
                                     {station.name}
                                 </li>
                                 ))}
@@ -115,14 +127,17 @@ function Home() {
                         {/* To */}
                         <div className="w-1/2">
                             <label className="text-sm">To</label><br />
-                            <input type="text" className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl" 
-                            value={destination}
-                            onChange={(e) => {
-                                setDestination(e.target.value);
-                                fetchSuggestions(e.target.value, "destination");
-                                handleOnChange(e)}}
-                            onFocus={()=>onFocus('destination')} onBlur={()=>onBlur('destination')}
-                            />
+                            <input 
+                                type="text" 
+                                name='destination'
+                                className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl" 
+                                value={destination}
+                                onFocus={()=>onFocus('destination')} 
+                                onBlur={()=>onBlur('destination')}
+                                onChange={(e) => {
+                                    setDestination(e.target.value);
+                                    fetchSuggestions(e.target.value, "destination");
+                                    handleOnChange(e)}}/>
 
                             {focusedDestination &&
                             <ul>
@@ -130,7 +145,8 @@ function Home() {
                                 <li key={station._id} 
                                     onClick={()=> { 
                                         setDestination(station.name); 
-                                        setDestinationSuggestions([])}}>
+                                        setDestinationSuggestions([])
+                                        setSearchFormData({...searchFormData,destination:station.name})}}>
                                     {station.name}
                                 </li>
                                 ))}
@@ -165,8 +181,10 @@ function Home() {
                                 className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl"
                             >
                                 <option value="sleeper">SLEEPER</option>
-                                <option value="ac">AC</option>
-                                <option value="General">GENERAL</option>
+                                <option value="ac 2 tier">AC 2 Tier</option>
+                                <option value="ac 3 tier">AC 3 Tier</option>
+                                <option value="chair car">CHAIR CAR</option>
+                                <option value="executive">EXECUTIVE</option>
                             </select>
                         </div>
                     </div>
