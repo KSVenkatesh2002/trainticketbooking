@@ -70,38 +70,82 @@ export const trainAddressList = async (req, res, next) => {
 }
 
 export const searchTrain = async (req, res, next) => {
-    const source = req.query.source;
-    const destination = req.query.destination;
-    const date = req.query.date;
-    const classes = req.query.classes;
-    //console.log('\n\n\ngiven data : ',source,destination,date,classes)
+    const {sourceStation, destinationStation, date, classes} = req.body
+    
+    //console.log('\n\n\ngiven data : ',sourceStation,destinationStation,date,classes)
 
     try{
-        const sourceStation = await Station.findOne({ name: { $regex: new RegExp(source, "i") } });
-        const destinationStation = await Station.findOne({ name: { $regex: new RegExp(destination, "i") } });
-        //console.log('source : ',sourceStation,'\ndestination : ',destinationStation)
+        // const searchedStations = ["c", "f"];
+        // const trains = await Train.find({
+        // stops: { $all: [
+        //     { $elemMatch: { station: searchedStations[0] } },
+        //     { $elemMatch: { station: searchedStations[1] } }
+        // ]}
+        // });
+
+        // const filteredTrains = trains.filter(train => {
+        // const stops = train.stops.map(stop => stop.station);
+        // const index1 = stops.indexOf(searchedStations[0]);
+        // const index2 = stops.indexOf(searchedStations[1]);
+        // return index1 !== -1 && index2 !== -1 && index1 < index2;
+        // });
 
         let availableTrain=[];
         if (sourceStation && destinationStation) {
             sourceStation.trains.forEach(sourceTrainId => {
                 destinationStation.trains.forEach(destinationTrainId => {
                     if (sourceTrainId.toString() === destinationTrainId.toString()) {
-                        
                         availableTrain.push(sourceTrainId);
                     }
                 })
             })
-        }else{res.status(200).json({success:false,message:'no trains available for given data'}); return}
+        }else{
+            res
+                .status(200)
+                .json({
+                    success:false,
+                    message:'no trains available for given data'
+                }); 
+            return
+        }
 
-        //console.log('availableTrain',availableTrain)
+        console.log('\navailableTrain',availableTrain)
+
         const trains = await Train.find({ _id: { $in: availableTrain } });
-        //console.log('train',trains)
-        if(trains.length===0)   res.status(401).json({success:false,message:'no trains available for given stations'});
-        else    res.status(200).json({train:trains,success:true});
+        console.log('\ntrain',trains)
+        console.log('\ntrain len',trains.length)
 
+        if(trains.length!==0) { 
+            const filteredTrains = trains.filter(train => {
+            const stops = train.stops.map(stop => stop.station);
+            console.log('stop',stops)
+            const index1 = stops.indexOf(sourceStation.name);
+            const index2 = stops.indexOf(destinationStation.name);
+            console.log('index ',index1,index2)
+            return index1 !== -1 && index2 !== -1 && index1 < index2})
+
+            console.log(filteredTrains)
+            if(filteredTrains.length !== 0)
+                res
+                .status(200)
+                .json({
+                    filteredTrains,
+                    date,
+                    classes,
+                    success:true});
+            else
+                res
+                .status(401)
+                .json({
+                    success:false,
+                    message:'train going opposite direction'});    
+        }else
+            res
+                .status(401)
+                .json({
+                    success:false,
+                    message:'no trains available for given stations'});
     }catch(e){
-        console.log(e)
+        next(e)
     }
-
-    
 }

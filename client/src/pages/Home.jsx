@@ -1,13 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 function Home() {
     const currentDate = new Date()
     const min = currentDate.toISOString().split('T')[0]
 
     const navigate = useNavigate()
-
-    const sourceRef = useRef(null)
-    const destinationRef = useRef(null)
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
@@ -16,12 +13,21 @@ function Home() {
     const [focusedSource,setFocusedSource] = useState(false)
     const [focusedDestination,setFocusedDestination] = useState(false)
     const [searchFormData, setSearchFormData] = useState({
-        source,
-        destination,
+        source:'',
+        destination:'',
         date:min,
         classes:'sleeper'
     })
-    const [result, setResult] = useState(false)
+    const [error, setError] = useState(false)
+
+    const [finalAddress, setFinalAddress] = useState([]);
+
+    // useEffect(()=>{
+    //     console.log('\n\n\n',searchFormData)
+    //     console.log('sourceSuggestions :',sourceSuggestions)
+    //     console.log('destinationSuggestions :',destinationSuggestions)
+    //     console.log('final address :',finalAddress)
+    // },[searchFormData, sourceSuggestions, destinationSuggestions, finalAddress])
 
     const onFocus = (type) => {
         if(type==='source')   setFocusedSource(true)
@@ -35,25 +41,35 @@ function Home() {
     }
 
     const handleOnChange = (e) => {
-        setResult(false)
+        setError('')
         setSearchFormData({...searchFormData, [e.target.name]:e.target.value})
-        console.log(searchFormData)
     }
 
     const handleSumbit = async (e) => {
-        setResult(false)
+        setError('')
         e.preventDefault();
         try{
-            const res = await fetch(`/api/train/search?source=${searchFormData.source}&destination=${searchFormData.destination}&date=${searchFormData.date}&classes=${searchFormData.classes}`)
+            const res = await fetch('/api/train/search',{
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sourceStation:finalAddress[0],
+                    destinationStation:finalAddress[1],
+                    date:searchFormData.date,
+                    classes:searchFormData.classes
+                }),
+            })
             const data = await res.json()
             console.log(data)
-            if(data.success)   navigate("/searchresult", {
-                state: { trains: data.train }
-              });
-            else   setResult(true)
+            if(data.success)   {
+                navigate("/searchresult", {
+                    state: { data }})}
+            else   setError(data.message)
         
-        }catch(error){
-            console.log(error)
+        }catch(e){
+            setError(e.message)
         }
     }
 
@@ -90,7 +106,7 @@ function Home() {
                     <h1 className="b text-5xl my-4">BOOK TICKET</h1>
 
                     {/* row1 */}
-                    <div className="flex justify-between mb-5">
+                    <div className="flex flex-col justify-between md:mb-5  md:flex-row">
 
                         {/* From */}
                         <div className="w-1/2">
@@ -100,12 +116,10 @@ function Home() {
                                 value={source}
                                 name='source'
                                 onChange={(e) => {
-                                    console.log(e.target.value)
                                     setSource(e.target.value);
-                                    fetchSuggestions(e.target.value, "source");
-                                    handleOnChange(e)}}
+                                    fetchSuggestions(e.target.value, "source");}}
                                 onFocus={()=>onFocus('source')} onBlur={()=>onBlur('source')}
-                                className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl" 
+                                className=" border-2  focus:border-b-4 rounded-lg  h-12 text-2xl" 
                             /> 
 
                             { focusedSource && 
@@ -113,9 +127,8 @@ function Home() {
                                 {sourceSuggestions.map((station) => (
                                 <li key={station._id} 
                                     onClick={()=> {
-                                        setSource(station.name); 
-                                        setSourceSuggestions([]);
-                                        setSearchFormData({...searchFormData,source:station.name})}}>
+                                        setSource(station.name);
+                                        setFinalAddress([station,finalAddress[1]])}}>
                                     {station.name}
                                 </li>
                                 ))}
@@ -136,17 +149,15 @@ function Home() {
                                 onBlur={()=>onBlur('destination')}
                                 onChange={(e) => {
                                     setDestination(e.target.value);
-                                    fetchSuggestions(e.target.value, "destination");
-                                    handleOnChange(e)}}/>
+                                    fetchSuggestions(e.target.value, "destination");}}/>
 
                             {focusedDestination &&
                             <ul>
                                 {destinationSuggestions.map((station) => (
                                 <li key={station._id} 
                                     onClick={()=> { 
-                                        setDestination(station.name); 
-                                        setDestinationSuggestions([])
-                                        setSearchFormData({...searchFormData,destination:station.name})}}>
+                                        setDestination(station.name);
+                                        setFinalAddress([finalAddress[0],station])}}>
                                     {station.name}
                                 </li>
                                 ))}
@@ -156,7 +167,7 @@ function Home() {
                     </div>
 
                     {/* row2 */}
-                    <div className="flex justify-between mb-10">
+                    <div className="flex flex-col justify-between md:flex-row mb-10">
 
                         {/* Date */}
                         <div className="w-1/2">
@@ -167,7 +178,7 @@ function Home() {
                                 min={min} 
                                 value={searchFormData.date}
                                 onChange={(e)=>handleOnChange(e)}
-                                className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl" />
+                                className="border-2  focus:border-b-4 rounded-lg h-12  text-2xl" />
                         </div>
 
                         {/* Classess */}
@@ -178,7 +189,7 @@ function Home() {
                                 name='classes'
                                 value={searchFormData.classes} 
                                 onChange={(e)=>handleOnChange(e)}
-                                className="border-2  focus:border-b-4 rounded-lg h-12 text-2xl"
+                                className="border-2  focus:border-b-4 rounded-lg h-12  text-2xl"
                             >
                                 <option value="sleeper">SLEEPER</option>
                                 <option value="ac 2 tier">AC 2 Tier</option>
@@ -193,7 +204,7 @@ function Home() {
                     <button
                         className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
                     >SEARCH</button>
-                    <h3>{result && 'no trains available'}</h3>
+                    <h3 className='text-red-500 font-bold self-center text-2xl'>{error}</h3>
 
                 </form>
 
