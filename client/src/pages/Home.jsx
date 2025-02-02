@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { setTrainsList} from '../redux/slices/trainSlice';
+import { useDispatch } from 'react-redux';
+
 function Home() {
     const currentDate = new Date()
     const min = currentDate.toISOString().split('T')[0]
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
@@ -64,6 +68,12 @@ function Home() {
             const data = await res.json()
             console.log(data)
             if(data.success)   {
+                dispatch(setTrainsList({
+                    trains:data.filteredTrains,
+                    source,
+                    destination,
+                    date: searchFormData.date
+                }))
                 navigate("/searchresult", {
                     state: { data }})}
             else   setError(data.message)

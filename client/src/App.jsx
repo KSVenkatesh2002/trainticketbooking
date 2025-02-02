@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import PrivateRouter from './component/PrivateRouter';
 import './css/App.css';
 import SearchResult from './pages/SearchResult';
+import Booking from './pages/Booking';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/profile"     element={<Profile/>} />
                 </Route>
                 <Route path="/searchresult" element={<SearchResult/>} />
+                <Route path='booking' element={<Booking/>} />
             </Routes>
         </BrowserRouter>
     )

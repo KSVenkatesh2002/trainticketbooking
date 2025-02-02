@@ -11,14 +11,18 @@ const trainSchema = new mongoose.Schema(
         duration: String,
         daysOfOperation: [String],
         seatsAvailable: {
-            Sleeper: Number,
+            sleeper: Number,
             AC3Tier: Number,
-            AC2Tier: Number
+            AC2Tier: Number,
+            chairCar : Number,
+            executive : Number
         },
         fare: {
-            Sleeper: Number,
+            sleeper: Number,
             AC3Tier: Number,
-            AC2Tier: Number
+            AC2Tier: Number,
+            chairCar: Number,
+            executive: Number
         },
         stops: [{
             station: String,

@@ -112,8 +112,8 @@ export const searchTrain = async (req, res, next) => {
         console.log('\navailableTrain',availableTrain)
 
         const trains = await Train.find({ _id: { $in: availableTrain } });
-        console.log('\ntrain',trains)
-        console.log('\ntrain len',trains.length)
+        // console.log('\ntrain',trains)
+        // console.log('\ntrain len',trains.length)
 
         if(trains.length!==0) { 
             const filteredTrains = trains.filter(train => {
@@ -121,7 +121,7 @@ export const searchTrain = async (req, res, next) => {
             console.log('stop',stops)
             const index1 = stops.indexOf(sourceStation.name);
             const index2 = stops.indexOf(destinationStation.name);
-            console.log('index ',index1,index2)
+            // console.log('index ',index1,index2)
             return index1 !== -1 && index2 !== -1 && index1 < index2})
 
             console.log(filteredTrains)
