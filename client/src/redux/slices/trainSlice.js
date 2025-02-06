@@ -9,7 +9,9 @@ const trainSlice=createSlice({
         destinationName:'',
         travelDate:'',
         finalDate:'',
-        selectedClass:''
+        selectedClass:'',
+        passengerInfo:[],
+        contactInfo:{}
     },
     reducers:{
         setTrainsList(state,action){
@@ -22,9 +24,13 @@ const trainSlice=createSlice({
             state.bookingTrain=action.payload.train,
             state.selectedClass=action.payload.class,
             state.finalDate=action.payload.date
+        },
+        setDetails(state,action){
+            state.passengerInfo=action.payload.passenger,
+            state.contactInfo=action.payload.contact
         }
     }
 })
 
-export const {setTrainsList, setBooking} = trainSlice.actions;
+export const {setTrainsList, setBooking, setDetails} = trainSlice.actions;
 export default trainSlice.reducer;

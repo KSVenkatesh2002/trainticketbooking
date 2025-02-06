@@ -6,8 +6,9 @@ import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import PrivateRouter from './component/PrivateRouter';
 import './css/App.css';
-import SearchResult from './pages/SearchResult';
+import TrainList from './pages/TrainList';
 import Booking from './pages/Booking';
+import Payment from './pages/Payment';
 
 
 function App() {
@@ -21,8 +22,9 @@ function App() {
                 <Route element={<PrivateRouter />}>
                     <Route path="/profile"     element={<Profile/>} />
                 </Route>
-                <Route path="/searchresult" element={<SearchResult/>} />
+                <Route path="/train-list" element={<TrainList/>} />
                 <Route path='booking' element={<Booking/>} />
+                <Route path='/booking/payment' element={<Payment/>} />
             </Routes>
         </BrowserRouter>
     )
