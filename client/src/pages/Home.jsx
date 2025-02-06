@@ -74,7 +74,7 @@ function Home() {
                     destination,
                     date: searchFormData.date
                 }))
-                navigate("/searchresult", {
+                navigate("/train-list", {
                     state: { data }})}
             else   setError(data.message)
         
