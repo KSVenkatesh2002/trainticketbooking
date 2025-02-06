@@ -149,3 +149,8 @@ export const searchTrain = async (req, res, next) => {
         next(e)
     }
 }
+
+export const bookTicket = async (req, res, next) => {
+    const {train, date:finalDate, class:selectedClass, sourceName, destinationName, passengerInfo, contactInfo, payment } = res.body
+    
+}
