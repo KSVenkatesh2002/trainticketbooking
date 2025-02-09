@@ -1,37 +1,36 @@
 import mongoose from 'mongoose';
 
-const trainSchema = new mongoose.Schema(
-    {
-        name: String,
-        number: String,
-        source: String,
-        destination: String,
-        departureTime: String,
-        arrivalTime: String,
-        duration: String,
-        daysOfOperation: [String],
-        seatsAvailable: {
-            sleeper: Number,
-            AC3Tier: Number,
-            AC2Tier: Number,
-            chairCar : Number,
-            executive : Number
+
+const trainSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    number: { type: Number, required: true },
+    classes: { type: [String], required: true },
+    daysOfOperation: { type: [String], required: true },
+    coach_structure: {
+        SL: {
+            total_coaches: { type: Number, required: true },
+            seats_per_coach: { type: Number, required: true },
+            price_per_km: { type: Number, required: true }
         },
-        fare: {
-            sleeper: Number,
-            AC3Tier: Number,
-            AC2Tier: Number,
-            chairCar: Number,
-            executive: Number
+        AC2: {
+            total_coaches: { type: Number, required: true },
+            seats_per_coach: { type: Number, required: true },
+            price_per_km: { type: Number, required: true }
         },
-        stops: [{
-            station: String,
-            arrival: String,
-            departure: String
-        }]
+        AC3: {
+            total_coaches: { type: Number, required: true },
+            seats_per_coach: { type: Number, required: true },
+            price_per_km: { type: Number, required: true }
+        }
     },
-    { timestamps: true }
-);
+    stations: [{ 
+        number: { type: Number, required: true },
+        name: { type: String, required: true },
+        arrival: { type: String, default: null },
+        departure: { type: String, default: null },
+        distance: { type: Number, required: true } 
+    }]
+});
 
 const Train = mongoose.model('Train', trainSchema);
 export default Train;

@@ -20,27 +20,18 @@ export const trainUpload = async (req, res, next) => {
 
         const trainId = newTrain._id; // Use the generated ObjectId
         console.log('Train ID:', trainId)
-        //console.log('Start processing stops...');
-        for (const stop of req.body.stops) {
-            //console.log('Processing stop:', stop.station);
-            let station = await Station.findOne({ name: stop.station });
 
-            if (station) {
-                console.log('\nExisting station found:', station.name);
-                if (!station.trains.includes(trainId)) {
-                    station.trains.push(trainId);
-                    await station.save();
-                    //console.log('Station updated:', station);
-                }
-                console.log('Station updated: ', station);
-            } else {
-                console.log('\nCreating new station:', stop.station);
-                const newStation = new Station({
-                    name: stop.station,
-                    trains: [trainId]
-                });
+        for (const stop of req.body.stations) {
+            let isStationUploaded = await Station.findOne({ name: stop.name });
+
+            if (!isStationUploaded) {
+                console.log('\n not Exided station:', stop.name);
+
+                const newStation = new Station({name:stop.name})
                 await newStation.save();
-                console.log('New Station Saved:', newStation);
+                
+                console.log('Station updated: ', newStation);
+
             }
         }
         console.log('\nAll stations updated.\n\n');
