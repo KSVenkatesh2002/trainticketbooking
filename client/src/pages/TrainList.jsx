@@ -1,7 +1,9 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import {useNavigate} from 'react-router-dom'
 import { setBooking } from '../redux/slices/trainSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight, faBan, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 
 function TrainList() {
@@ -9,30 +11,13 @@ function TrainList() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-//      currentTrainList = [{
-//     "_id": "T1001",
-//     "name": "Chennai Express",
-//     "number": "12623",
-//     "source": "Chennai",
-//     "destination": "Mumbai",
-//     "departureTime": "18:30",
-//     "arrivalTime": "08:00",
-//     "duration": "13h 30m",
-//     "daysOfOperation": ["Mon", "Wed", "Fri"],
-//     "seatsAvailable": { "sleeper": 50, "AC3Tier": 30, "AC2Tier": 20 },
-//     "fare": { "sleeper": 500, "AC3Tier": 1200, "AC2Tier": 1800 },
-//     "stops": [
-//       { "station": "Chennai", "arrival": "-", "departure": "18:30" },
-//       { "station": "Bangalore", "arrival": "22:00", "departure": "22:15" },
-//       { "station": "Pune", "arrival": "04:30", "departure": "04:45" },
-//       { "station": "Mumbai", "arrival": "08:00", "departure": "-" }
-//     ]
-//   }, others...]
-    
-    const travelWeek  = new Date(travelDate).getDay()
-
-    const classes = [['sleeper','SLP'],['AC2Tier','AC2'],['AC3Tier','AC3'],['chairCar','CC'],['executive','EXE']]
-
+    const [date,setDate] = useState(new Date(travelDate))
+    const [trainsOnDate,setTrainsOnDate] = useState(currentTrainList)
+    const [availableSeats, setAvailableSeats] = useState({});
+    const [seatsLoading, setSeatsLoading] = useState({});
+    const [price, setPrice] = useState({});
+    const [selectedClass, setSelectedClass] = useState('');
+    // const [errorMsg, setErrorMsg] = useState(null)
 
     const weekNo = {
         Sun : 0,
@@ -44,161 +29,168 @@ function TrainList() {
         Sat : 6
     }
 
-    const [availableTrainsOnDate,setAvailableTrainsOnDate] = useState([])
-    const [availableTrainsOnOtherDate,setAvailableTrainsOnOtherDate] = useState([])
-    const [selected,setSelected] = useState()
-    
-    //seapare available trains on given and other date
+    //getting train for requested date
     useEffect(() => {
-        const trainsOnDate = [];
-        const trainsOnOtherDate = [];
-
-        currentTrainList.forEach(train => {
-            if (
-                train.daysOfOperation.includes('Daily') ||
-                train.daysOfOperation.some(day => weekNo[day] === travelWeek)
-            ) {
-                trainsOnDate.push(train);
-            } else {
-                trainsOnOtherDate.push(train);
-            }
-        });
-
-        setAvailableTrainsOnDate(trainsOnDate);
-        setAvailableTrainsOnOtherDate(trainsOnOtherDate);
-    }, [currentTrainList, travelDate]);
-
-
+        console.log('date',date.toISOString().split('T')[0])
+        let list = [];
     
-    //find all travel dates
-    function giveMyTenDate(weeks) {
-        let urWeekDate = [];
-        const startDate = new Date(travelDate); // Start from travelDate
-
-        if (weeks.includes('Daily')) {
-            for (let i = 0; i < 10; i++) {
-                const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
-                urWeekDate.push(date.toISOString().split('T')[0]);
-            }
-        } else {
-            const operationDays = weeks.map(day => weekNo[day]);
-            let currentDate = new Date(startDate);
-
-            while (urWeekDate.length < 10) {
-                if (operationDays.includes(currentDate.getDay())) {
-                    urWeekDate.push(currentDate.toISOString().split('T')[0]);
+        currentTrainList.forEach(train => {
+            train.daysOfOperation.forEach(day => {
+                if (weekNo[day] === date.getDay()) {
+                    list.push(train);
                 }
-                currentDate.setDate(currentDate.getDate() + 1); // Move to next day
+            });
+        });
+    
+        setTrainsOnDate(list);
+    }, [date, currentTrainList]);
+
+    // useEffect(() => {
+    //     console.log('trains on date', trainsOnDate);
+    // }, [trainsOnDate]);
+
+    const handleAvailableSeats = async (trainId, travelDate, fromIndex, toIndex) => {
+        setSeatsLoading(prevLoading => ({
+            ...prevLoading,
+            [trainId]: true
+        }));
+        try {
+            const response = await fetch(`/api/train/available-seats?trainId=${trainId}&fromIndex=${fromIndex}&toIndex=${toIndex}&date=${travelDate}`);
+            const data = await response.json();
+    
+            if (data.success) {
+                setAvailableSeats(prevSeats => ({
+                    ...prevSeats,
+                    [trainId]: data.availableSeats // Store seats per train ID
+                }));
+            } else {
+                console.log("Error fetching seats:", data.message);
             }
+        } catch (error) {
+            console.error("Error fetching available seats:", error);
         }
-        return urWeekDate;
+        setSeatsLoading(prevLoading => ({
+            ...prevLoading,
+            [trainId]: false
+        }));
+    };
+
+    function handlePrice(t, cls){
+        const price_per_km = t.coach_structure[cls].price_per_km
+        const distance = t.stations[1].distance - t.stations[0].distance
+        setPrice({[t._id]: price_per_km*distance})
     }
 
-    async function handleOnClickSelect(e)  {
-        console.log(e)
-        dispatch(setBooking({train:e.trainId,class:e.class,date:e.date}))
+    async function bookTrain(id){
+        dispatch(setBooking({train:id, class:selectedClass, date: date.toISOString().split('T')[0], price}))
         navigate('/booking')
     }
 
+
+    
+
     return (
-        <div className='flex flex-col w-screen items-center'>
+        <div className='flex flex-col h-[100vh] min-h-full items-center bg-orange-50 '>
 
-            <h2 className='m-2 p-2 rounded-2xl w-fit bg-orange-400 text-white'>Trains Available on  
-                <span className='font-bold ml-2 text-indigo-800'>{travelDate}
-                </span>
-            </h2>
-            <span className=' text-2xl font-bold p-2 text-blue-600'>
-                { availableTrainsOnDate.length!==0 ? '' : 'trains not available at this date, check other date'}
-            </span>
-            <ol className='w-full'>
-            {availableTrainsOnDate.concat(availableTrainsOnOtherDate).map((t, index) => (
-                
-                <li key={t._id} className='flex flex-col items-center mt-5 w-full '>
-                    {index === availableTrainsOnDate.length &&
-                    <h2 className='m-2 p-2 rounded-2xl w-fit bg-orange-300 '>Other Available Trains</h2>
-                    }
+            <div className="w-full flex justify-between md:max-w-[70vw]">
+                <button
+                    className="m-2 p-2 rounded border-b-4 border-black w-fit bg-orange-400 text-white"
+                    onClick={() => {
+                        setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000)); // Fixed: Create a new date
+                    }}
+                >   <FontAwesomeIcon icon={faArrowLeft} />
+                    Previous Date
+                </button>
+                <button
+                    className="m-2 p-2 rounded border-b-4 border-black w-fit bg-orange-400 text-white"
+                    onClick={() => {
+                        setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000)); // Fixed: Create a new date
+                    }}
+                >   Next Date
+                    <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+            </div>
 
-                    {/* train header */}
-                    <div>
-                        <div>
-                            <span className='mx-2'>{t.name}</span> | <span className='mx-2'>{t.number}</span>
-                        </div>
-                        <div className='text-center'>{t.daysOfOperation.map(day => 
-                            (<span key={day} className='mx-2'>{day}</span>))}
-                        </div>
-                    </div>
-
-                    {/* location and time */}
-                    <div className='flex flex-row justify-between w-full px-5 max-w-[700px]'>
-                        <div>
-                            <span>{sourceName}</span><br />
-                            <span>({t.stops.find(stop => stop.station === sourceName)?.departure })</span><br />
-                        </div>
-                        <div>
-                            <span>{destinationName}</span><br />
-                            <span>({t.stops.find(stop => stop.station === destinationName)?.arrival})</span><br />
-                        </div>
-                    </div>
+            { trainsOnDate.length===0 ?
+                <span className='text-xl p-2 text-red-600 '> 
+                    <FontAwesomeIcon icon={faBan} /> Trains not available at this date, check other date
+                </span> :
+                <ol className='w-full p-2 md:max-w-[70vw]'>
+                {trainsOnDate.map((t) => (
                     
-                    {/* show date wise available seats */}
-                    <div className='flex w-full flex-row items-center overflow-y-auto px-5'>
+                    <li key={t._id} className={`w-full flex border flex-col items-center mt-10 overflow-auto scroll-auto ${price[t._id] && 'shadow-lg shadow-orange-400/40'}`}>
                         
-                        <span>Available <br /> seats</span>
-                        <ol className='flex '>{giveMyTenDate(t.daysOfOperation).map((date) => (
+
+                        {/* train header */}
+                        <div className='w-full bg-orange-200 text-blue-800'>
+                            <div className='w-full text-center font-medium'>
+                                <span className='mx-2'>{t.name}</span> | <span className='mx-2'>{t.number}</span>
+                            </div>
+                            <div className='w-full text-center'>{t.daysOfOperation.map(day => 
+                                (<span key={day} className='mx-2'>{day}</span>))}
+                            </div>
+                        </div>
+
+                        {/* location and time */}
+                        <div className="flex flex-row justify-between bg-orange-100 w-full px-5 ">
+                            <div>
+                                <span className='font-bold'>{sourceName}</span>
+                                <br />
+                                <span>
+                                    {t.stations[0]?.departure || "N/A"}
+                                </span>
+                            </div>
+
+                            <div>
+                                <span className='font-bold'>{destinationName}</span>
+                                <br />
+                                <span>
+                                    {t.stations[1].arrival || "N/A"}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        {/* available seats */}
+                        <div className='w-full text-center font-semibold bg-orange-200'>Available Seats</div>
+                        <ol className='flex w-full p-2 bg-orange-200 text-blue-800 flex-row justify-around overflow-auto scroll-auto' 
+                            onClick={() => handleAvailableSeats(t._id, date, t.stations[0].number, t.stations[1].number)}
+                        >
                             
-                            // container for each day 
-                            <li key={date} className='m-2 w-[140px] '>
-                                <div className='border p-1 mb-1 text-center'>{date}</div>
+                            {availableSeats[t._id] ? (
+                                Object.entries(availableSeats[t._id]).map(([cls, count]) => (
 
-                                {/* single date with all classes*/}
-                                <ol className='flex justify-between'>
-                                    {classes.map(([key, label]) => (
-                                        t.seatsAvailable[key] && (
-                                            <li 
-                                                key={key} 
-                                                onClick={(e)=>{handleOnClickSelect({
-                                                    trainId : t._id,
-                                                    date,
-                                                    class:key
-                                                })}}
-                                                className='border px-1  hover:bg-black hover:text-white'
-                                            >
-                                                <ol>
-                                                    <li>{label}</li>
-                                                    <li>{t.seatsAvailable[key]}</li>
-                                                </ol>
-                                            </li>
-                                        )
-                                    ))}
-                                </ol>  
-                            </li>
-                        ))}</ol>
-                    </div>
-
-                    {/* show fare price for each class */}
-                    <div className='flex w-full flex-row items-center overflow-y-auto px-5'>
-                        <span>Fare</span>
-                        <ol className='flex '>
-                            {classes.map(([key, label]) => (
-                                
-                                t.fare[key] && (
-                                    <li key={key} className='m-2 w-[140px] '>
-                                        <div className='border p-1 mb-1 text-center'>{label}</div>
-                                        <div className='border p-1 mb-1 text-center'>₹{t.fare[key]}</div>
+                                    <li key={cls} 
+                                        className='p-2 border rounded bg-orange-100 hover:bg-orange-300' 
+                                        onClick={()=>{
+                                            setSelectedClass(cls)
+                                            handlePrice(t, cls)}}
+                                    >
+                                        <div className='font-semibold text-orange-800'>{cls}</div>
+                                        <div className='text-black '>{count} Seats</div>
                                     </li>
-                                )
-                            ))}
+                                ))
+                            ) : (
+                                <li className='px-4 py-2 border rounded'>
+                                    {seatsLoading[t._id] ? 
+                                    <FontAwesomeIcon className='animate-spin' icon={faSpinner} /> :
+                                    'Click to load seats'}
+                                </li>
+                            )}
                         </ol>
-                    </div>
+                        
+                        {/* ticket price */}
+                        {price[t._id] &&
+                            <div className='w-full flex justify-center items-center'
+                                onClick={()=>{bookTrain(t._id)}}
+                            >
+                                ₹{price[t._id]} <span className='flex justify-center items-center w-1/4 h-15 m-2 bg-orange-600 border border-orange-950 text-white rounded-2xl'>Book Now</span>
+                            </div>
+                        }
+                    </li>))}
+                </ol>
+            }
 
-
-                </li>))}
-            </ol>
-            
-
-            
-            <hr className='w-full m-5 border h-0' />
-
+            {/* {errorMsg && errorMsg} */}
         </div>
     )
 }
