@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
-const { Schema } = mongoose;
 
-const BookingSchema = new Schema({
-    train_number: { type: String, required: true },
+const bookingSchema = new mongoose.Schema({
+    train_id: { type: String, required: true },
+    payment_id:{ type:String},
     passenger: {
         name: { type: String, required: true },
         age: { type: Number, required: true },
-        gender: { type: String, required: true }
+        gender: { type: String, required: true },
+        birth: { type: String, required: true }
+    },
+    contactDetails: {
+        name: { type: String, required: true },
+        email: { type: String, required: true},
+        phoneno: { type: String, required: true }, 
     },
     from_station: {
         name: { type: String, required: true },
@@ -17,13 +23,11 @@ const BookingSchema = new Schema({
         no: { type: Number, required: true }
     },
     class: { type: String, required: true },
-    coach: { type: String, required: true },
-    seat: { type: String, required: true },
+    coach: { type: Number, required: true },
+    seat: { type: Number, required: true },
     status: { type: String, required: true },
     booking_date: { type: Date, required: true },
-    pnr: { type: String, required: true }
-});
+},{ timestamps: true });
 
-const Booking = mongoose.model('Booking', BookingSchema);
-
+const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;
