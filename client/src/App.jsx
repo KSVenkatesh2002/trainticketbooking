@@ -26,7 +26,8 @@ function App() {
                     <Route  path="/search"           element={<Search/>} />
                     <Route  path="/train-info"       element={<TrainInfo/>} />
                     <Route  element={<PrivateRouter />}>
-                        <Route  path="/pnr-status"       element={<PnrStatus/>} />
+                        <Route path="/pnr-status/:id" element={<PnrStatus />} /> {/* Dynamic Route */}
+                        <Route path="/pnr-status" element={<PnrStatus />} /> {/* For form submission without ID */}
                         <Route  path="/my-booking"       element={<BookingList/>} />
                     </Route>
                 </Route>
