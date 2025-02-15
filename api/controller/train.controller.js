@@ -316,20 +316,20 @@ export const payment = async (req, res, next) => {
 
 export const getPnr  = async (req, res, next) => {
     const pnrid = req.query.pnrid
-    console.log(pnrid)
+    //console.log(pnrid)
     try{
         // get booking data
         const bookingDetails = await Booking.findById(pnrid)
         if(!bookingDetails) return next(errorHandler(401,'PNR number is not valid'))
-        console.log('booking',bookingDetails)
+        //console.log('booking',bookingDetails)
         
         const {train_id} = bookingDetails
-        console.log(train_id)
+        //console.log(train_id)
         
         //get Train data
         const trainDetails = await Train.findById(train_id);
         if(!trainDetails) return next(errorHandler(401,'Train not found'))
-        console.log('train', trainDetails)
+        //console.log('train', trainDetails)
 
         trainDetails.stations = trainDetails.stations.filter(station =>
             station.name.trim().toLowerCase() === bookingDetails.from_station.name.trim().toLowerCase() ||
@@ -356,10 +356,45 @@ export const getPnr  = async (req, res, next) => {
                 time: trainDetails.stations[1].departure
             },
         }
-        console.log(result)
+        //console.log(result)
         res.status(200).json({success:true,result})
     }catch(e){
         next(errorHandler(401,e))
         console.log(e)
+    }
+}
+
+export const getMyBooking = async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+
+        // Get user details
+        const user = await User.findById(userId);
+        if (!user) return next(errorHandler(404, 'User not found'));
+
+        // Get user's PNR list
+        const pnrList = user.pnr;
+        if (!pnrList || pnrList.length === 0) {
+            return res.status(200).json({ success: true, message: 'No bookings found', bookings: [] });
+        }
+
+        // Fetch all booking details based on PNRs
+        const bookings = await Booking.find({ _id: { $in: pnrList } });
+
+        // Format response data
+        const result = bookings.map(booking => ({
+            passenger_name: booking.passenger.name,
+            from: booking.from_station.name,
+            to: booking.to_station.name,
+            date: booking.booking_date,
+            status: booking.status,
+            pnr: booking._id // Booking ID is used as PNR
+
+        }));
+
+        res.status(200).json({ success: true, result });
+
+    } catch (error) {
+        next(errorHandler(500, error.message || 'Internal Server Error'));
     }
 }

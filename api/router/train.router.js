@@ -1,5 +1,5 @@
 import express from 'express'
-import { searchTrain, test, trainAddressList, trainUpload, getAvailableSeats, bookTicket, payment, getPnr,} from '../controller/train.controller.js'
+import { searchTrain, test, trainAddressList, trainUpload, getAvailableSeats, bookTicket, payment, getPnr, getMyBooking} from '../controller/train.controller.js'
 
 const router = express.Router()
 router.get('/test', test)
@@ -9,6 +9,7 @@ router.get('/search', searchTrain)
 router.get('/available-seats', getAvailableSeats)
 router.post('/book-ticket',bookTicket)
 router.post('/book-ticket/payment',payment)
-router.get('/get-my-booking',getPnr)
+router.get('/get-pnr-status',getPnr)
+router.get('/get-my-booking/:userId',getMyBooking)
 
 export default router
