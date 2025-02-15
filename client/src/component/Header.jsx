@@ -1,47 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import styles from '../css/Header.module.css'
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTrain, faTrainSubway,  } from '@fortawesome/free-solid-svg-icons';
+import { faTrainSubway } from '@fortawesome/free-solid-svg-icons';
+import styles from '../css/Header.module.css'
 
 const profileLink = 'https://th.bing.com/th/id/OIP.bJpr9jpclIkXQT-hkkb1KQHaHa?w=184&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7';
 
 const Header = () => {
-    const { currentUser } = useSelector((state) => state.user)
+    const { currentUser } = useSelector((state) => state.user);
     const location = useLocation();
-    let [authStyle,setAuthStyle] = useState({display: 'block'});
+    const [authStyle, setAuthStyle] = useState(true);
+
     useEffect(() => {
-        const url = location.pathname;
-        setAuthStyle(url.includes('auth') ? {display: 'none'} : {display: 'block'})
-    }, [location.pathname])
+        setAuthStyle(!location.pathname.includes('auth'));
+    }, [location.pathname]);
+
     return (
-        <header className={styles.header}>
-            <nav>
-                <div className={styles.left}>
-                    <Link to="/" >
-                        <FontAwesomeIcon
-                            className='cursor-pointer text-black mx-1'
-                            icon={faTrainSubway}/>
-                        <h2 className='inline text-2xl'>Ticket Booking</h2>
+        <header className="min-h-[60px] h-[8vh]  flex items-center px-5">
+            <nav className="flex justify-between items-center w-full h-full">
+                <div className="font-bold text-2xl flex items-center space-x-2">
+                    <Link to="/" className="flex items-center space-x-1 text-black">
+                        <FontAwesomeIcon className="cursor-pointer" icon={faTrainSubway} />
+                        <h2 className="inline">Ticket Booking</h2>
                     </Link>
                 </div>
-                <div className={styles.right}>
-                    <span >
-                        <Link to="/" >Home</Link>
-                    </span> 
-                    <span >
-                        <Link to="/about" >About</Link>
-                    </span> 
-                    {!currentUser 
-                    ? <span style={authStyle}>
-                        <Link to="/auth/signup" >Signup</Link>
-                    </span> 
-                    : <span className={styles.profile}>
-                        <Link to="/profile">
-                            <img className={styles.imgTag} src={currentUser.photoURL || profileLink } alt="profile"/> 
+                <div className="flex items-center space-x-6 text-lg font-medium">
+                    <Link to="/" className="hover:text-gray-200 transition">Home</Link>
+                    <Link to="/about" className="hover:text-gray-200 transition">About</Link>
+                    {!currentUser ? (
+                        authStyle && (
+                            <Link to="/auth/signup" className="hover:text-gray-200 transition">Signup</Link>
+                        )
+                    ) : (
+                        <Link to="/profile" className="h-10 w-10 rounded-full overflow-hidden">
+                            <img className="h-full w-full object-cover rounded-full" 
+                                src={currentUser.photoURL || profileLink} alt="profile" />
                         </Link>
-                    </span>}
+                    )}
                 </div>
             </nav>
         </header>
