@@ -61,9 +61,9 @@ const PnrStatus = () => {
 
             {/* Show details if available */}
             {details && (
-                <div className="w-full p-4">
-                    <h3><strong>Train Details</strong></h3>
-                    <div className="flex flex-col items-center mt-2 mb-5 w-full bg-white rounded-lg md:w-1/2 p-2.5">
+                <div className="w-full md:w-7/10 flex-col flex items-center p-4">
+                    <h3 className=""><strong>Train Details</strong></h3>
+                    <div className="flex flex-col items-center mt-2 mb-5 w-full bg-white rounded-lg p-2.5">
                         {/* Train Header */}
                         <div className="w-full bg-orange-200 text-blue-800">
                             <div className="font-semibold text-2xl">
@@ -91,7 +91,7 @@ const PnrStatus = () => {
 
                     {/* Passenger Details */}
                     <h3><strong>Passenger Details</strong></h3>
-                    <div className="flex justify-between items-center shadow-md bg-white p-3 mb-2 rounded-lg w-full md:w-7/10">
+                    <div className="flex justify-between items-center shadow-md bg-white p-3 mb-2 rounded-lg w-full">
                         <table className="w-full border-collapse border border-gray-400 text-center">
                             <thead>
                                 <tr>
@@ -114,7 +114,7 @@ const PnrStatus = () => {
 
                     {/* Contact Details */}
                     <h3><strong>Contact Details</strong></h3>
-                    <div className="w-full flex justify-between items-center bg-white p-3 mb-2 rounded-lg shadow-md md:w-7/10">
+                    <div className="w-full flex justify-between items-center bg-white p-3 mb-2 rounded-lg shadow-md">
                         <table className="w-full border-collapse border border-gray-400 text-center">
                             <tbody>
                                 <tr>

@@ -398,3 +398,26 @@ export const getMyBooking = async (req, res, next) => {
         next(errorHandler(500, error.message || 'Internal Server Error'));
     }
 }
+export const getTrainInfo = async (req, res, next) => {
+    try {
+        const { query } = req.query;
+        if (!query) return res.status(400).json({ success: false, message: "Search query is required" });
+
+        let trains = await Train.find({
+            $or: [
+                { number: isNaN(query) ? null : Number(query) },
+                { name: { $regex: query, $options: 'i' } },
+                { "stations.arrival": query },
+                { "stations.departure": query }
+            ]
+        });
+
+        if (!trains.length) {
+            return res.status(404).json({ success: false, message: "No train found" });
+        }
+
+        res.json({ success: true, result: trains });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};

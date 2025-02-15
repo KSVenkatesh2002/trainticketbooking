@@ -337,6 +337,7 @@ const Payment = () => {
             </div>
 
             {/* success result popup*/}
+            {showResult &&
             <div className='absolute bg-black/70 backdrop-blur-sm h-full w-screen flex justify-center items-center'>
                 <div className='relative bg-black/50 text-white tracking-[0.2rem] text-2xl m-w-[400px] m-h-[400px] h-1/2 w-6/10 p-4 shadow-lg shadow-black/50 flex justify-center items-center'>
                     <button className='absolute top-0 right-1 m-0 p-0'
@@ -347,9 +348,10 @@ const Payment = () => {
                     >
                         <FontAwesomeIcon icon={faX} />
                     </button>
-                    your payment was success
+                    your payment was success <br />
+                    Your PNR is updated to your account
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }
