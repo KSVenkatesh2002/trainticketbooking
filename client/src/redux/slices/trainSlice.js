@@ -4,14 +4,22 @@ const trainSlice=createSlice({
     name:'train',
     initialState:{
         currentTrainList:null,
-        bookingTrain:null,
         sourceName:'',
         destinationName:'',
         travelDate:'',
+
+        bookingTrain:null,
         finalDate:'',
         selectedClass:'',
-        passengerInfo:[],
-        contactInfo:{}
+        price:'',
+
+        passengerList:[],
+        contactDetails:{},
+
+        displayForm:true,
+        displayContactForm:true,
+
+        currentBookingPnr:[],
     },
     reducers:{
         setTrainsList(state,action){
@@ -24,13 +32,54 @@ const trainSlice=createSlice({
             state.bookingTrain=action.payload.train,
             state.selectedClass=action.payload.class,
             state.finalDate=action.payload.date
+            state.price=action.payload.price
         },
-        setDetails(state,action){
-            state.passengerInfo=action.payload.passenger,
-            state.contactInfo=action.payload.contact
+        setPassengerList(state,action){
+            state.passengerList=action.payload
+        },
+        setContactDetails(state,action){
+            state.contactDetails=action.payload
+        },
+        setDisplayForm(state){
+            state.displayForm = !state.displayForm
+        },
+        setDisplayContactForm(state){
+            state.displayContactForm = !state.displayContactForm
+        },
+        setPnr(state,action){
+            state.currentBookingPnr = [...state.currentBookingPnr, action.payload]
+        },
+        paymentSuccess(state){
+            Object.assign(state, {
+                currentTrainList: null,
+                sourceName: '',
+                destinationName: '',
+                travelDate: '',
+                bookingTrain: null,
+                finalDate: '',
+                selectedClass: '',
+                price: '',
+                passengerList: [],
+                contactDetails: {},
+                displayForm: true,
+                displayContactForm: true,
+                currentBookingPnr: [],
+            });
+            
+            
         }
     }
 })
 
-export const {setTrainsList, setBooking, setDetails} = trainSlice.actions;
+export const {
+    setTrainsList,
+    setBooking,
+    setPassengerList,
+    setContactDetails,
+    setDisplayForm,
+    setDisplayContactForm,
+    setPnr,
+    paymentSuccess,
+} = trainSlice.actions;
+
 export default trainSlice.reducer;
