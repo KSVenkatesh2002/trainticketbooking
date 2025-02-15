@@ -136,7 +136,7 @@ export default function Booking() {
                         </label>
                         <label className='mb-2 md:w-2/5'>
                             <span className='text-sm'>Age:</span><br />
-                            <input className='w-full  min-w-2/5 p-1 border border-gray-300 rounded' type="number" name="age" min='0' max='100' required />
+                            <input className='w-full  min-w-2/5 p-1 border border-gray-300 rounded' type="number" name="age" min='1' max='100' required />
                         </label>
                         <label className='mb-4 md:w-2/5'>
                             <span className='text-sm'>Gender:</span><br />

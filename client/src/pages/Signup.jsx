@@ -41,7 +41,7 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex flex-col justify-start items-center w-screen h-[92vh]">
+        <div className="flex flex-col justify-start items-center w-full h-[92vh]">
             <h2 className="text-xl font-bold mb-4">Create An Account</h2>
             <form onSubmit={handlesubmit} className="flex flex-col justify-center items-center">
                 <label className="absolute left-[-1000000px]" htmlFor="username">name</label>
@@ -51,7 +51,7 @@ const Signup = () => {
                     value={formdata.username}
                     placeholder="Username"
                     required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60"
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-black rounded-lg "
                     onChange={handlechange}
                 />
                 <br />
@@ -63,7 +63,7 @@ const Signup = () => {
                     value={formdata.email}
                     placeholder="Email"
                     required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60"
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2  border-black rounded-lg "
                     onChange={handlechange}
                 />
                 <br />
@@ -75,7 +75,7 @@ const Signup = () => {
                     max={max}
                     value={formdata.dob}
                     required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60"
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2  border-black rounded-lg"
                     onChange={handlechange}
                 />
                 <br />
@@ -87,7 +87,7 @@ const Signup = () => {
                     value={formdata.password}
                     placeholder="Password"
                     required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60"
+                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2  border-black rounded-lg "
                     onChange={handlechange}
                 />
                 <br />
@@ -103,9 +103,9 @@ const Signup = () => {
 
             {error && <span className="text-red-500 mt-2">{error}</span>}
             
-            <div className="relative flex justify-center items-center w-[70vw] max-w-[400px]">
-                <span className="absolute left-0 top-1/2 w-[20vw] border-2 border-black rounded-md bg-black"></span> <span className="relative my-2 text-center">OR</span>
-                <span className="absolute right-0 top-1/2 w-[20vw] border-2 border-black rounded-md bg-black"></span>
+            <div className="relative flex justify-center items-center w-7/10 max-w-[400px]">
+                <span className="absolute left-0 top-1/2 w-40 border-2 border-black rounded-md bg-black"></span> <span className="relative my-2 text-center">OR</span>
+                <span className="absolute right-0 top-1/2 w-40 border-2 border-black rounded-md bg-black"></span>
             </div>
 
             <OAuth />

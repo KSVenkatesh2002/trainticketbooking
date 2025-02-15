@@ -119,8 +119,8 @@ function Search() {
                             className="w-full border-2 focus:border-b-4 rounded-lg h-12 text-2xl" 
                         /> 
 
-                        { focusedSource && 
-                        <ul className='absolute'>
+                        { focusedSource && Object.keys(sourceSuggestions).length > 0  && 
+                        <ul className='absolute w-full md:w-1/5 p-5 rounded-3xl shadow-lg shadow-black/50 bg-white'>
                             {sourceSuggestions.map((station) => (
                             <li key={station._id} 
                                 onClick={()=> {
@@ -148,8 +148,8 @@ function Search() {
                                 setDestination(e.target.value);
                                 fetchSuggestions(e.target.value, "destination");}}/>
 
-                        {focusedDestination &&
-                        <ul className='absolute'>
+                        {focusedDestination && Object.keys(destinationSuggestions).length > 0 &&
+                        <ul className='absolute w-full md:w-1/5 p-5 rounded-3xl shadow-lg shadow-black/50 bg-white'>
                             {destinationSuggestions.map((station) => (
                             <li key={station._id} 
                                 onClick={()=> { 
