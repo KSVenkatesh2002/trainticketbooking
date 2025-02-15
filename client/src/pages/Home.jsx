@@ -1,60 +1,52 @@
-import React, { useEffect, useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboardList, faCodeCommit, faSearch, faTrain } from '@fortawesome/free-solid-svg-icons';
+import { motion } from "framer-motion";
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function Home() {
-    const location = useLocation();
-    const [nav,setNav] = useState('')
-    const route = location.pathname.split('/')[location.pathname.split('/').length-1]
-    useEffect(()=>{
-        setNav(route)
-    },[route])
-    
-//
-    return (
-        <div className="flex flex-col items-center h-full min-h-screen w-full">
+const Home = () => {
+  return (
+    <div className="flex flex-col min-h-screen w-full bg-gray-900 text-white">
+      {/* Hero Section */}
+      <div className="relative flex flex-col items-center justify-center h-screen text-center px-6">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Book Your Train Ticket in Seconds! 🚆
+        </h1>
+        <p className="text-lg md:text-xl text-gray-300 mb-6">
+          Find your perfect train journey with ease.
+        </p>
+        <Link to="/search">
+        <div className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+          Search Trains
+        </div></Link>
 
-
-            <div className='w-full h-[10vh] md:h-[12vh] min-h-[50px] mt-5 flex justify-evenly items-center'>
-                <div className='flex justify-evenly items-center bg-gray-100 h-9/10 rounded-2xl w-1/5 text-center hover:underline'>
-                    <Link to='/search' className={`text-orange-200 ${nav === 'search' && 'text-orange-600' } font-semibold`}>
-                        <FontAwesomeIcon icon={faSearch} className={`hover:text-4xl text-3xl block md:hidden`} /><br />
-                        <span className="hidden md:inline">Search</span>
-                    </Link>
-                </div>
-
-                <div className='flex justify-evenly items-center bg-gray-100 h-9/10 rounded-2xl w-1/5 text-center hover:underline'>
-                    <Link to='/pnr-status' className={`text-orange-200 ${nav === 'pnr-status' && 'text-orange-600' } font-semibold `} >
-                        <FontAwesomeIcon icon={faCodeCommit} className="hover:text-4xl text-3xl block md:hidden" /><br />
-                        <span className="hidden md:inline">PNR status</span>
-                    </Link>
-                </div>
-
-                <div className='flex justify-evenly items-center bg-gray-100 h-9/10 rounded-2xl w-1/5 text-center hover:underline'>
-                    <Link to='/train-info' className={`text-orange-200 ${nav === 'train-info' && 'text-orange-600' } font-semibold `}>
-                        <FontAwesomeIcon icon={faTrain} className="hover:text-4xl text-3xl bloctext-3xl k md:hidden" /><br />
-                        <span className="hidden md:inline">Train info</span>
-                    </Link>
-                </div>
-
-                <div className='flex justify-evenly items-center bg-gray-100 h-9/10 rounded-2xl w-1/5 text-center hover:underline'>
-                    <Link to='/my-booking' className={`text-orange-200 ${nav === 'my-booking' && 'text-orange-600' } font-semibold `}>
-                        <FontAwesomeIcon icon={faClipboardList} className="hover:text-4xl text-3xl block md:hidden" /><br />
-                        <span className="hidden md:inline">Booking list</span>
-                    </Link>
-                </div>
-            </div>
-
-            <hr className='border w-9/10 mt-4' />
-
-
-            
-
-            <Outlet/>
-            
-            
+        {/* Moving Train Animation */}
+        <div className="absolute bottom-10 w-full flex justify-center overflow-hidden">
+          <motion.img
+            src="https://img.icons8.com/ios-filled/100/train.png" // Train icon
+            alt="Moving Train"
+            className="w-20 md:w-32"
+            animate={{ x: ["-100vw", "100vw"] }} // Moves from left to right
+            transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
+          />
         </div>
-    )
-}
-export default Home
+      </div>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-800 py-6 text-center mt-auto">
+        <p className="text-gray-400">Made with ❤️ by    VENKATESH</p>
+        <div className="flex justify-center gap-6 mt-3">
+          <a href="https://github.com/KSVenkatesh2002" target="_blank" rel="noopener noreferrer">
+            <FaGithub className="text-2xl hover:text-orange-400 transition" />
+          </a>
+          <a href="https://linkedin.com/in/venkatesh-k-s" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin className="text-2xl hover:text-orange-400 transition" />
+          </a>
+          <a href="mailto:kotavenkatesh2002@gmail.com">
+            <FaEnvelope className="text-2xl hover:text-orange-400 transition" />
+          </a>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Home;

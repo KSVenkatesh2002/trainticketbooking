@@ -16,6 +16,7 @@ import Search from './pages/Search';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import BookingRouter from './component/BookingRouter';
+import HomeRouter from './component/HomeRouter';
 
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
             <Header/>
             <Routes>
                 {/*  home page */}
-                <Route  path="/"                 element={<Home/>} >
+                <Route  path="/"                 element={<HomeRouter/>} >
+                    <Route  index element={<Home/>} />
                     <Route  path="/search"           element={<Search/>} />
                     <Route  path="/train-info"       element={<TrainInfo/>} />
                     <Route  element={<PrivateRouter />}>
