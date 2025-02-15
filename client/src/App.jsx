@@ -15,6 +15,7 @@ import BookingList from './pages/BookingList';
 import Search from './pages/Search';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import BookingRouter from './component/BookingRouter';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <BrowserRouter>
             <Header/>
             <Routes>
+                {/*  home page */}
                 <Route  path="/"                 element={<Home/>} >
                     <Route  path="/search"           element={<Search/>} />
                     <Route  path="/train-info"       element={<TrainInfo/>} />
@@ -31,19 +33,25 @@ function App() {
                         <Route  path="/my-booking"       element={<BookingList/>} />
                     </Route>
                 </Route>
+
+                {/* header */}
                 <Route  path="/about"            element={<About/>} />
+                <Route  path="/profile"          element={<Profile/>} />
+
+                {/* auth routing */}
                 <Route  path="/auth"      element={<Auth/>} >
                     <Route  path="signup"      element={<Signup/>} />
                     <Route  path="login"      element={<Login/>} />
                 </Route>
                 <Route  path="/train-list"       element={<TrainList/>} />
-
-                <Route  element={<PrivateRouter />}>
-                    <Route  path="/profile"          element={<Profile/>} />
-                    <Route  path='/booking'          element={<Booking/>} />
-                    <Route  path='/booking/payment'  element={<Payment/>} />
-                </Route>
                 
+                <Route element={<PrivateRouter />}>
+                    {/* Booking Routes */}
+                    <Route path="/booking" element={<BookingRouter />}>
+                        <Route index element={<Booking />} />  {/* Default child route */}
+                        <Route path="payment" element={<Payment />} /> {/* Booking Payment */}
+                    </Route>
+                </Route>
                 
             </Routes>
         </BrowserRouter>
