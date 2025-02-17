@@ -31,7 +31,7 @@ const TrainInfo = () => {
             <form onSubmit={handleSearch} className="bg-gray-950 p-4 m-2 w-9/10 rounded-lg md:w-1/2 lg:w-1/3">
                 <input
                     type="text"
-                    placeholder="Enter train name, number, or time"
+                    placeholder="Enter train name or number"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     className="p-2 border rounded w-full bg-gray-400"

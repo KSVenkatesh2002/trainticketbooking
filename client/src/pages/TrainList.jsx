@@ -11,6 +11,10 @@ function TrainList() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const minDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+
+    const maxDate = new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000)
+
     const [date,setDate] = useState(new Date(travelDate))
     const [trainsOnDate,setTrainsOnDate] = useState(currentTrainList)
     const [availableSeats, setAvailableSeats] = useState({});
@@ -31,7 +35,6 @@ function TrainList() {
 
     //getting train for requested date
     useEffect(() => {
-        console.log('date',date.toISOString().split('T')[0])
         let list = [];
     
         currentTrainList.forEach(train => {
@@ -90,39 +93,44 @@ function TrainList() {
     
 
     return (
-        <div className='flex flex-col h-[100vh] min-h-full items-center bg-orange-50 '>
+        <div className='flex flex-col h-full min-h-screen w-full items-center bg-gray-950'>
 
+            {/* date changing buttons */}
             <div className="w-full flex justify-between md:max-w-[70vw]">
                 <button
-                    className="m-2 p-2 rounded border-b-4 border-black w-fit bg-orange-400 text-white"
+                    className={`m-2 p-2 rounded border-b-4 border-black w-fit text-white ${minDate.toISOString().split('T')[0]=== date.toISOString().split('T')[0] ? 'bg-gray-400' : 'bg-orange-400'}`}
                     onClick={() => {
-                        setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000)); // Fixed: Create a new date
+                        if(minDate.toISOString().split('T')[0]!== date.toISOString().split('T')[0])  setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000)); // Fixed: Create a new date
                     }}
                 >   <FontAwesomeIcon icon={faArrowLeft} />
                     Previous Date
                 </button>
                 <button
-                    className="m-2 p-2 rounded border-b-4 border-black w-fit bg-orange-400 text-white"
+                    className={`m-2 p-2 rounded border-b-4 border-black w-fit text-white ${maxDate.toISOString().split('T')[0]=== date.toISOString().split('T')[0] ? 'bg-gray-400' : 'bg-orange-400'}`}
                     onClick={() => {
-                        setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000)); // Fixed: Create a new date
+
+                        if(maxDate.toISOString().split('T')[0]!== date.toISOString().split('T')[0])  setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000)); // Fixed: Create a new date
                     }}
                 >   Next Date
                     <FontAwesomeIcon icon={faArrowRight} />
                 </button>
             </div>
+            <p className='text-white'>
+                Trains on <span className='text-blue-500 font-semibold'>{ date.toISOString().split('T')[0]}</span>
+            </p>
 
+            
             { trainsOnDate.length===0 ?
                 <span className='text-xl p-2 text-red-600 '> 
                     <FontAwesomeIcon icon={faBan} /> Trains not available at this date, check other date
                 </span> :
-                <ol className='w-full p-2 md:max-w-[70vw]'>
+                <ol className='w-full flex flex-wrap p-2 justify-evenly items-center'>
                 {trainsOnDate.map((t) => (
                     
-                    <li key={t._id} className={`w-full flex border flex-col items-center mt-10 overflow-auto scroll-auto ${price[t._id] && 'shadow-lg shadow-orange-400/40'}`}>
-                        
+                    <li key={t._id} className={`w-full md:w-9/19 flex border flex-col items-center mt-10 ${price[t._id] && 'shadow-md shadow-white/50'}`}>
 
                         {/* train header */}
-                        <div className='w-full bg-orange-200 text-blue-800'>
+                        <div className='w-full bg-gray-200 text-blue-800'>
                             <div className='w-full text-center font-medium'>
                                 <span className='mx-2'>{t.name}</span> | <span className='mx-2'>{t.number}</span>
                             </div>
@@ -132,7 +140,7 @@ function TrainList() {
                         </div>
 
                         {/* location and time */}
-                        <div className="flex flex-row justify-between bg-orange-100 w-full px-5 ">
+                        <div className="flex flex-row justify-between bg-gray-100 w-full px-5 ">
                             <div>
                                 <span className='font-bold'>{sourceName}</span>
                                 <br />
@@ -151,8 +159,8 @@ function TrainList() {
                         </div>
                         
                         {/* available seats */}
-                        <div className='w-full text-center font-semibold bg-orange-200'>Available Seats</div>
-                        <ol className='flex w-full p-2 bg-orange-200 text-blue-800 flex-row justify-around overflow-auto scroll-auto' 
+                        <div className='w-full text-center font-semibold bg-gray-200'>Available Seats</div>
+                        <ol className='flex w-full p-2 bg-gray-200 text-blue-800 flex-row justify-around overflow-auto scroll-auto' 
                             onClick={() => handleAvailableSeats(t._id, date, t.stations[0].number, t.stations[1].number)}
                         >
                             
@@ -160,7 +168,7 @@ function TrainList() {
                                 Object.entries(availableSeats[t._id]).map(([cls, count]) => (
 
                                     <li key={cls} 
-                                        className='p-2 border rounded bg-orange-100 hover:bg-orange-300' 
+                                        className='p-2 border rounded bg-gray-100 hover:bg-gray-300' 
                                         onClick={()=>{
                                             setSelectedClass(cls)
                                             handlePrice(t, cls)}}
@@ -179,13 +187,13 @@ function TrainList() {
                         </ol>
                         
                         {/* ticket price */}
-                        {price[t._id] &&
-                            <div className='w-full flex justify-center items-center'
-                                onClick={()=>{bookTrain(t._id)}}
-                            >
-                                ₹{price[t._id]} <span className='flex justify-center items-center w-1/4 h-15 m-2 bg-orange-600 border border-orange-950 text-white rounded-2xl'>Book Now</span>
-                            </div>
-                        }
+                        <div className='w-full flex justify-center items-center text-white'
+                            onClick={()=>{
+                                if(price[t._id])
+                                bookTrain(t._id)}}
+                        >
+                            {price[t._id] && '₹'+price[t._id]} <span className={`flex justify-center items-center w-1/4 h-15 m-2 ${price[t._id] ? 'bg-blue-800 shadow-md shadow-blue-800' : 'bg-gray-400'} text-white rounded-2xl`}>Book Now</span>
+                        </div>
                     </li>))}
                 </ol>
             }

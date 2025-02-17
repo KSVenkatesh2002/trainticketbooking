@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { paymentSuccess } from '../redux/slices/trainSlice';
+import { paymentSuccess } from '../../redux/slices/trainSlice';
 
 const Payment = () => {
     const {currentTrainList, bookingTrain, sourceName, destinationName, finalDate, selectedClass, price, passengerList, contactDetails, currentBookingPnr} = useSelector((state) => state.train);

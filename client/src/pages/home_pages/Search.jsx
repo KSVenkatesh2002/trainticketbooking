@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { setTrainsList} from '../redux/slices/trainSlice';
+import { setTrainsList} from '../../redux/slices/trainSlice';
 import { useDispatch } from 'react-redux';
 
 function Search() {

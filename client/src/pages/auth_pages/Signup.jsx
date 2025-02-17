@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
-import { start, failure, success } from '../redux/user/userSlice';
+import { start, failure, success } from '../../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import OAuth from '../component/OAuth';
+import OAuth from '../../component/OAuth';
 
 const Signup = () => {
     const currentD = new Date();
