@@ -5,6 +5,8 @@ import userRouter from './router/user.router.js'
 import authRouter from './router/auth.router.js'
 import trainRouter from './router/train.router.js'
 import cookieParser from 'cookie-parser';
+import cleanupExpiredBookings from './utils/bookingCleanup.js';
+import deletePendingBookings from './utils/deletePendingBookings.js'
 dotenv.config();
 
 mongoose
@@ -15,6 +17,10 @@ mongoose
     })
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.log(`Mongo connection error: ${err}`));
+
+// Start Cleanup Job
+cleanupExpiredBookings();
+deletePendingBookings();
 
 export const app = express();
 
