@@ -149,12 +149,12 @@ async function getBookedSeats(trainId, date, fromIndex, toIndex, seatClass){
             class: seatClass,
             $or: [
                 { $and: [
-                    { "from_station.no": { $lte: fromIndex } }, 
-                    { "to_station.no": { $gte: fromIndex } }
+                    { "from_station.no": { $lt: fromIndex } }, 
+                    { "to_station.no": { $gt: fromIndex } }
                 ] },
                 { $and: [
-                    { "from_station.no": { $lte: toIndex } }, 
-                    { "to_station.no": { $gte: toIndex } }
+                    { "from_station.no": { $lt: toIndex } }, 
+                    { "to_station.no": { $gt: toIndex } }
                 ] }
             ]
         });
@@ -178,13 +178,12 @@ const getTotalSeats = async (trainId, seatClass) => {
     }
 };
 
-
 const findAvailableSeat = async (trainId, date, fromIndex, toIndex, seatClass) => {
     try{
         //console.log('findAvailableSeat')
         const bookedSeats = await getBookedSeats(trainId, date, fromIndex, toIndex, seatClass);
         const totalSeats = await getTotalSeats(trainId, seatClass);
-        //console.log('\nbs',bookedSeats,'\nts', totalSeats)
+        console.log('\nbs',bookedSeats,'\nts', totalSeats)
         // Remove booked seats from the total seat list
         const availableSeats = totalSeats.filter(seat => !bookedSeats.includes(seat));
         //console.log('as',availableSeats)
@@ -388,11 +387,12 @@ export const getMyBooking = async (req, res, next) => {
             to: booking.to_station.name,
             date: booking.booking_date,
             status: booking.status,
+            seat:booking.seat,
             pnr: booking._id // Booking ID is used as PNR
 
         }));
 
-        res.status(200).json({ success: true, result });
+        res.status(200).json({ success: true, bookings:result });
 
     } catch (error) {
         next(errorHandler(500, error.message || 'Internal Server Error'));

@@ -21,8 +21,9 @@ function BookingList() {
             try {
                 const res = await fetch(`/api/train/get-my-booking/${currentUser._id}`);
                 const data = await res.json();
+                console.log(data)
                 if (data.success) {
-                    setBooking(data.result);
+                    setBooking(data.bookings);
                 } else {
                     setError(data.message);
                 }
@@ -35,14 +36,14 @@ function BookingList() {
         };
 
         fetchBookings();
-    }, [currentUser?._id]);
+    }, []);
 
     if (loading) return <div className="text-center text-xl mt-10">Loading...</div>;
     if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
     return (
-        <div className="flex flex-col md:w-9/10 mt-2 items-center min-h-screen bg-gray-100 p-4">
-            <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">Your Bookings</h1>
+        <div className="flex flex-col w-full pt-2 items-center min-h-screen bg-gray-950 p-4">
+            <h1 className="text-2xl md:text-3xl font-semibold text-white mb-6">Your Bookings</h1>
             <div className="flex flex-wrap justify-between items-center w-full ">
                 {bookings.length > 0 ? (
                     bookings.map((booking, index) => (
@@ -60,6 +61,9 @@ function BookingList() {
                                 Date: <span className="font-medium">{new Date(booking.date).toISOString().split('T')[0]}</span>
                             </p>
                             <p className="text-gray-600">
+                                Seat: <span className="font-medium text-blue-500">{booking.seat}</span>
+                            </p>
+                            <p className="text-gray-600">
                                 Status: <span className={`font-medium ${booking.status === 'Pending' ? 'text-red-500' : 'text-green-600'}`}>{booking.status}</span>
                             </p>
                             <p className="text-gray-600">
@@ -68,7 +72,7 @@ function BookingList() {
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500 text-lg">No bookings found.</p>
+                    <p className="text-white text-lg">No bookings found.</p>
                 )}
             </div>
         </div>

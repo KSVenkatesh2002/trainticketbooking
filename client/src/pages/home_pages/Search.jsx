@@ -54,9 +54,9 @@ function Search() {
         e.preventDefault();
         try{
             setLoading(true)
-            const res = await fetch(`/api/train/search?sourceStation=${source}&destinationStation=${destination}&date=${searchFormData.date}&trainClass=${searchFormData.classes}`)
+            const res = await fetch(`/api/train/search?sourceStation=${source}&destinationStation=${destination}&date=${searchFormData.date}&trainClass=${searchFormData.classes}`,{method:'GET'})
             const data = await res.json()
-            console.log(data)
+            console.log('res',data)
             if(data.success)   {
                 dispatch(setTrainsList({
                     trains:data.trains,
@@ -70,6 +70,7 @@ function Search() {
             setLoading(false)
         
         }catch(e){
+            console.log(e)
             setError(e.message)
             setLoading(false)
         }
@@ -78,18 +79,31 @@ function Search() {
 
     // Fetch station suggestions
     const fetchSuggestions = async (query, type) => {
-        if (query==='') {
+        if (query === '') {
             if (type === "source") setSourceSuggestions([]);
             else setDestinationSuggestions([]);
-            return
-        };
-
-        const response = await fetch(`/api/train/address-list?address=${query}`);
-        const data = await response.json();
-
-        if (type === "source") setSourceSuggestions(data);
-        else setDestinationSuggestions(data);
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/api/train/address-list?address=${query}`);
+            const data = await response.json();
+    
+            // Ensure data is an array before setting state
+            if (Array.isArray(data)) {
+                if (type === "source") setSourceSuggestions(data);
+                else setDestinationSuggestions(data);
+            } else {
+                if (type === "source") setSourceSuggestions([]); 
+                else setDestinationSuggestions([]);
+            }
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+            if (type === "source") setSourceSuggestions([]);
+            else setDestinationSuggestions([]);
+        }
     };
+    
 
     return (
         <div className='w-9/10 mb-20 '>
@@ -122,12 +136,12 @@ function Search() {
                         { focusedSource && Object.keys(sourceSuggestions).length > 0  && 
                         <ul className='absolute w-full md:w-1/5 p-5 rounded-3xl shadow-lg shadow-black/50 bg-white'>
                             {sourceSuggestions.map((station) => (
-                            <li key={station._id} 
-                                onClick={()=> {
-                                    setSource(station.name);
-                                    setSourceSuggestions([])}}>
-                                {station.name}
-                            </li>
+                                <li key={station._id} 
+                                    onClick={()=> {
+                                        setSource(station.name);
+                                        setSourceSuggestions([])}}>
+                                    {station.name}
+                                </li>
                             ))}
                         </ul>}
                     </div>
