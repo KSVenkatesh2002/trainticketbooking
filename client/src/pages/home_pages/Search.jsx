@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { setTrainsList} from '../../redux/slices/trainSlice';
 import { useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightLeft } from '@fortawesome/free-solid-svg-icons';
 
 function Search() {
     const currentDate = new Date()
@@ -106,17 +108,11 @@ function Search() {
     
 
     return (
-        <div className='w-9/10 mb-20 '>
-            {/* intro */}
-            <div className='w-full  my-10 text-center'>
-                <h1 className='font-bold text-2xl tracking-[0.2rem]'>
-                    Welcome to Train Ticket Booking center! 🚆
-                </h1>
-            </div>
+        <div className='h-fit w-full md:py-10 relative md:static'>
             
-            <img src="https://i.etsystatic.com/22260569/r/il/e1c601/3098488926/il_fullxfull.3098488926_7htx.jpg" alt="train cover photo" className='rounded-t-[4rem] object-cover h-50 md:h-100 w-full block mx-auto'/>
+            <img src="https://i.etsystatic.com/22260569/r/il/e1c601/3098488926/il_fullxfull.3098488926_7htx.jpg" alt="train cover photo" className='rounded-b-3xl md:rounded-t-[4rem] md:rounded-b-none object-cover h-50 md:h-100 md:w-9/10 w-full block mx-auto'/>
 
-            <form onSubmit={(e)=>handleSumbit(e)} className="flex flex-col justify-evenly items-center p-2 mt-2 bg-white shadow-md shadow-gray-300/50 rounded-b-[4rem]">
+            <form onSubmit={(e)=>handleSumbit(e)} className="absolute top-30 left-1/2 -translate-x-1/2 w-8/10 md:static md:translate-x-0 md:w-9/10 md:rounded-t-none md:mt-4 flex flex-col justify-evenly items-center p-4  bg-white shadow-md shadow-gray-300/50 rounded-4xl mx-auto">
                 
                 <div className="flex flex-col md:flex-row justify-evenly items-center w-full relative">
                     {/* From */}
@@ -146,7 +142,7 @@ function Search() {
                         </ul>}
                     </div>
 
-                    <span></span>
+                    <span className='h-full flex justify-center items-center rotate-90 mt-2 md:rotate-0'><FontAwesomeIcon icon={faRightLeft} /></span>
 
                     {/* To */}
                     <div className="w-full md:w-1/5 ">
@@ -206,11 +202,11 @@ function Search() {
                     </div>
                 </div>
 
-                {/* row3 */}
+                {/* search button */}
                 <button
                     type='sumbit'
-                    className={`w-[200px] p-4 m-4 hover:bg-orange-700 text-white font-bold  rounded ${loading ? 'bg-gray-400' : 'bg-orange-500'}`}
-                >{loading ? 'SEARCHING' : 'SEARCH'}</button>
+                    className={`w-[200px] p-4 m-4 text-white font-bold rounded ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-700'}`}
+                >{loading ? 'SEARCHING...' : 'SEARCH'}</button>
                 <h3 className='text-red-500 font-bold self-center text-2xl'>{error}</h3>
 
             </form>
