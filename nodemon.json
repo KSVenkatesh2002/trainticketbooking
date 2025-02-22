@@ -1,5 +1,6 @@
 {
-    "watch": ["api"], 
+    "watch": ["api"],
     "ext": "js,json",
-    "ignore": ["client/dist", "node_modules"]
+    "ignore": ["node_modules", "client/dist"],
+    "delay": "2000"
 }  
