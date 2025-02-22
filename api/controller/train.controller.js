@@ -61,38 +61,6 @@ export const trainAddressList = async (req, res, next) => {
     }
 }
 
-export const getAvailableSeats = async (req, res, next) => {
-    const {trainId, date, fromIndex, toIndex} = req.query
-    try {
-        const travelDate = new Date(date);
-
-        // Find the train
-        const train = await Train.findById(trainId);
-        if (!train) return res.status(404).json({ message: "Train not found" });
-
-        // Store available seats for each class
-        const availableSeats = {};
-
-        // Loop through each class and calculate available seats
-        for (const cls of train.classes) {
-            const totalSeats = train.coach_structure[cls].total_coaches * train.coach_structure[cls].seats_per_coach;
-
-            // Find booked seats for the selected route & date
-            const bookedSeats = await getBookedSeats(trainId, travelDate, fromIndex, toIndex, cls);
-
-            // Calculate available seats
-            const bookedCount = bookedSeats.length;
-            availableSeats[cls] = totalSeats - bookedCount; // Subtract booked from total
-        }
-
-        res.json({ success: true, availableSeats });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
-    }
-};
-
 export const searchTrain = async (req, res, next) => {
     const {sourceStation, destinationStation} = req.query
     
@@ -145,20 +113,27 @@ async function getBookedSeats(trainId, date, fromIndex, toIndex, seatClass){
         //console.log('given for bs',trainId, date, fromIndex, toIndex, seatClass)
         const bookedSeats = await Booking.find({
             train_id: trainId,
-            booking_date: new Date(date),
+            booking_date: { 
+                $gte: new Date(date.toISOString().split('T')[0] + "T00:00:00.000Z"), 
+                $lt: new Date(date.toISOString().split('T')[0] + "T23:59:59.999Z") 
+            },
             class: seatClass,
             $or: [
                 { $and: [
-                    { "from_station.no": { $lt: fromIndex } }, 
+                    { "from_station.no": { $lte: fromIndex } }, 
                     { "to_station.no": { $gt: fromIndex } }
                 ] },
                 { $and: [
                     { "from_station.no": { $lt: toIndex } }, 
-                    { "to_station.no": { $gt: toIndex } }
+                    { "to_station.no": { $gte: toIndex } }
+                ] },
+                { $and: [
+                    { "from_station.no": { $gt: fromIndex } }, 
+                    { "to_station.no": { $lt: toIndex } }
                 ] }
             ]
         });
-        //console.log('bookedSeats',bookedSeats)
+        // console.log('getBookedSeats -> bookedSeats',bookedSeats)
         return bookedSeats.map(booking => booking.seat);
     }catch(e){
         return e
@@ -183,7 +158,7 @@ const findAvailableSeat = async (trainId, date, fromIndex, toIndex, seatClass) =
         //console.log('findAvailableSeat')
         const bookedSeats = await getBookedSeats(trainId, date, fromIndex, toIndex, seatClass);
         const totalSeats = await getTotalSeats(trainId, seatClass);
-        console.log('\nbs',bookedSeats,'\nts', totalSeats)
+        // console.log('\nbs',bookedSeats,'\nts', totalSeats)
         // Remove booked seats from the total seat list
         const availableSeats = totalSeats.filter(seat => !bookedSeats.includes(seat));
         //console.log('as',availableSeats)
@@ -206,8 +181,8 @@ export const bookTicket = async (req, res, next) => {
             from_station,
             to_station
         } = req.body
-        //console.log('\n\n\n\n\nstart', req.body)
-        const availableSeat = await findAvailableSeat(train_id, date, from_station.no, to_station.no, selectedClass);
+        // console.log('\n\n\n\n\nstart', req.body)
+        const availableSeat = await findAvailableSeat(train_id, new Date(date), from_station.no, to_station.no, selectedClass);
 
         //console.log('availableSeat',availableSeat)
 
@@ -252,6 +227,41 @@ export const bookTicket = async (req, res, next) => {
         res.status(200).json({success: true, message: "Seat booked successfully", pnr: newBooking._id })
     }catch(e){
         next(errorHandler(401,e))
+    }
+};
+
+//for train list
+export const getAvailableSeats = async (req, res, next) => {
+    const {trainId, date, fromIndex, toIndex} = req.query
+    try {
+        const travelDate = new Date(date);
+
+        // Find the train
+        const train = await Train.findById(trainId);
+        if (!train) return res.status(404).json({ message: "Train not found" });
+
+        // Store available seats for each class
+        const availableSeats = {};
+
+        // Loop through each class and calculate available seats
+        for (const cls of train.classes) {
+            const totalSeats = await getTotalSeats(trainId, cls);
+
+            // Find booked seats for the selected route & date
+            const bookedSeats = await getBookedSeats(trainId, travelDate, fromIndex, toIndex, cls);
+
+            // console.log('tl bookedSeats',bookedSeats)
+
+            // Calculate available seats
+            availableSeats[cls] = totalSeats.length - bookedSeats.length; // Subtract booked from total
+            // console.log('availableSeats',availableSeats)
+        }
+
+        res.json({ success: true, availableSeats });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 };
 
