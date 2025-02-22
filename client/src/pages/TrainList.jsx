@@ -11,7 +11,7 @@ function TrainList() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const minDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+    const minDate = new Date()
 
     const maxDate = new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000)
 
@@ -35,6 +35,8 @@ function TrainList() {
 
     //getting train for requested date
     useEffect(() => {
+        setAvailableSeats({})
+
         let list = [];
     
         currentTrainList.forEach(train => {
@@ -67,7 +69,7 @@ function TrainList() {
                     [trainId]: data.availableSeats // Store seats per train ID
                 }));
             } else {
-                console.log("Error fetching seats:", data.message);
+                console.log("Error fetching seats:", data);
             }
         } catch (error) {
             console.error("Error fetching available seats:", error);
@@ -127,11 +129,11 @@ function TrainList() {
                 <ol className='w-full flex flex-wrap p-2 justify-evenly items-center'>
                 {trainsOnDate.map((t) => (
                     
-                    <li key={t._id} className={`w-full md:w-9/19 flex border flex-col items-center mt-10 ${price[t._id] && 'shadow-md shadow-white/50'}`}>
+                    <li key={t._id} className={`w-full md:w-9/19 flex border flex-col bg-gray-800 items-center mt-10 text-gray-300`}>
 
                         {/* train header */}
-                        <div className='w-full bg-gray-200 text-blue-800'>
-                            <div className='w-full text-center font-medium'>
+                        <div className='w-full  text-blue-400'>
+                            <div className='w-full text-center font-medium text-2xl'>
                                 <span className='mx-2'>{t.name}</span> | <span className='mx-2'>{t.number}</span>
                             </div>
                             <div className='w-full text-center'>{t.daysOfOperation.map(day => 
@@ -140,7 +142,7 @@ function TrainList() {
                         </div>
 
                         {/* location and time */}
-                        <div className="flex flex-row justify-between bg-gray-100 w-full px-5 ">
+                        <div className="flex flex-row justify-between bg-gray-700 w-full px-5 ">
                             <div>
                                 <span className='font-bold'>{sourceName}</span>
                                 <br />
@@ -159,22 +161,21 @@ function TrainList() {
                         </div>
                         
                         {/* available seats */}
-                        <div className='w-full text-center font-semibold bg-gray-200'>Available Seats</div>
-                        <ol className='flex w-full p-2 bg-gray-200 text-blue-800 flex-row justify-around overflow-auto scroll-auto' 
+                        <div className='w-full text-center font-semibold '>Available Seats</div>
+                        <ol className='flex w-full p-2   flex-row justify-around overflow-auto scroll-auto' 
                             onClick={() => handleAvailableSeats(t._id, date, t.stations[0].number, t.stations[1].number)}
                         >
-                            
                             {availableSeats[t._id] ? (
                                 Object.entries(availableSeats[t._id]).map(([cls, count]) => (
 
                                     <li key={cls} 
-                                        className='p-2 border rounded bg-gray-100 hover:bg-gray-300' 
+                                        className='p-2 rounded shadow-lg shadow-gray-700/50 bg-gray-900 hover:bg-gray-300' 
                                         onClick={()=>{
                                             setSelectedClass(cls)
                                             handlePrice(t, cls)}}
                                     >
-                                        <div className='font-semibold text-orange-800'>{cls}</div>
-                                        <div className='text-black '>{count} Seats</div>
+                                        <div className='font-semibold text-orange-500'>{cls}</div>
+                                        <div className='text-blue-400'>{count} Seats</div>
                                     </li>
                                 ))
                             ) : (
@@ -192,7 +193,12 @@ function TrainList() {
                                 if(price[t._id])
                                 bookTrain(t._id)}}
                         >
-                            {price[t._id] && '₹'+price[t._id]} <span className={`flex justify-center items-center w-1/4 h-15 m-2 ${price[t._id] ? 'bg-blue-800 shadow-md shadow-blue-800' : 'bg-gray-400'} text-white rounded-2xl`}>Book Now</span>
+                            {price[t._id] && '₹'+price[t._id]}
+                            <span 
+                                className={`flex justify-center items-center w-1/4 h-15 m-2 ${price[t._id] ? 'bg-blue-800 shadow-md shadow-blue-800' : 'bg-gray-400'} text-white rounded-2xl`}
+                            >
+                                Book Now
+                            </span>
                         </div>
                     </li>))}
                 </ol>
