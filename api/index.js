@@ -16,12 +16,15 @@ mongoose
         socketTimeoutMS: 120000,           // Increase to 120 seconds
         connectTimeoutMS: 120000            // Add connection timeout
     })
-    .then(() => console.log('Connected to MongoDB'))
+    .then(() => {
+        console.log('Connected to MongoDB')
+        // Start Cleanup Job
+        cleanupExpiredBookings();
+        deletePendingBookings();
+    })
     .catch((err) => console.log(`Mongo connection error: ${err}`));
 
-// Start Cleanup Job
-cleanupExpiredBookings();
-deletePendingBookings();
+
 
 // const __dirname = path.resolve();
 
@@ -35,6 +38,12 @@ export const app = express();
 
 app.listen(3000, () => { 
     console.log("server is established") 
+});
+
+// Gracefully release the port on restart
+process.on("SIGTERM", () => {
+    console.log("Closing server...");
+    server.close(() => process.exit(0));
 });
 
 app.use(express.json())
