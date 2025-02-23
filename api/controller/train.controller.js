@@ -375,6 +375,7 @@ export const getPnr  = async (req, res, next) => {
 
 export const getMyBooking = async (req, res, next) => {
     try {
+        console.log('hi it is booking...')
         const userId = req.params.userId;
 
         // Get user details
@@ -405,7 +406,7 @@ export const getMyBooking = async (req, res, next) => {
         res.status(200).json({ success: true, bookings:result });
 
     } catch (error) {
-        next(errorHandler(500, error.message || 'Internal Server Error'));
+        next(error);
     }
 }
 export const getTrainInfo = async (req, res, next) => {
