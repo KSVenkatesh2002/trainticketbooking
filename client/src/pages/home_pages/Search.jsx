@@ -108,112 +108,157 @@ function Search() {
     
 
     return (
-        <div className='h-fit w-full md:py-10 relative md:static'>
+        <div className="min-h-screen bg-gray-900 w-full py-10 flex flex-col items-center">
             
-            <img src="https://i.etsystatic.com/22260569/r/il/e1c601/3098488926/il_fullxfull.3098488926_7htx.jpg" alt="train cover photo" className='rounded-b-3xl md:rounded-t-[4rem] md:rounded-b-none object-cover h-50 md:h-100 md:w-9/10 w-full block mx-auto'/>
+            {/* Train Cover Image */}
+            <div className="relative w-11/12 md:w-9/10 md:rounded-[4rem] rounded-2xl h-56 md:h-96 mx-auto shadow-2xl overflow-hidden">
+                {/* Background Image */}
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-all duration-500 filter brightness-85"
+                    style={{
+                        backgroundImage: `url('https://i.etsystatic.com/22260569/r/il/e1c601/3098488926/il_fullxfull.3098488926_7htx.jpg')`,
+                    }}
+                ></div>
 
-            <form onSubmit={(e)=>handleSumbit(e)} className="absolute top-30 left-1/2 -translate-x-1/2 w-8/10 md:static md:translate-x-0 md:w-9/10 md:rounded-t-none md:mt-4 flex flex-col justify-evenly items-center p-4  bg-white shadow-md shadow-gray-300/50 rounded-4xl mx-auto">
-                
-                <div className="flex flex-col md:flex-row justify-evenly items-center w-full relative">
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black"></div>
+
+                {/* Text Content */}
+                <div className="relative flex flex-col justify-center items-center h-full text-center px-6">
+                    <h1 className="text-white text-3xl md:text-5xl font-extrabold tracking-wider drop-shadow-lg">
+                        Welcome to <span className="text-yellow-400">Train Ticket Booking</span> Center! 🚆
+                    </h1>
+                    <p className="text-gray-200 text-lg md:text-xl mt-2 tracking-wide">
+                        Book your journey with ease and comfort.
+                    </p>
+                </div>
+            </div>
+
+    
+            {/* Search Form */}
+            <form 
+                onSubmit={(e) => handleSumbit(e)}
+                className="w-11/12 md:w-4/5 lg:w-3/5 bg-gray-800 text-white p-6 mt-6 rounded-2xl shadow-lg flex flex-col items-center gap-6"
+            >
+                <h2 className="text-2xl font-semibold text-indigo-400">🚆 Search for a Train</h2>
+    
+                {/* Inputs Container */}
+                <div className="w-full flex flex-col md:flex-row justify-between gap-6">
+                    
                     {/* From */}
-                    <div className="w-full md:w-1/5">
-                        <label className="text-sm">From</label><br />
+                    <div className="w-full md:w-1/5 relative">
+                        <label className="text-sm text-gray-400">From</label>
                         <input 
                             type="text" 
                             value={source}
                             name='source'
                             onChange={(e) => {
                                 setSource(e.target.value);
-                                fetchSuggestions(e.target.value, "source");}}
-                            onFocus={()=>onFocus('source')} onBlur={()=>onBlur('source')}
-                            className="w-full border-2 focus:border-b-4 rounded-lg h-12 text-2xl" 
-                        /> 
-
-                        { focusedSource && Object.keys(sourceSuggestions).length > 0  && 
-                        <ul className='absolute w-full md:w-1/5 p-5 rounded-3xl shadow-lg shadow-black/50 bg-white'>
-                            {sourceSuggestions.map((station) => (
-                                <li key={station._id} 
-                                    onClick={()=> {
-                                        setSource(station.name);
-                                        setSourceSuggestions([])}}>
-                                    {station.name}
-                                </li>
-                            ))}
-                        </ul>}
+                                fetchSuggestions(e.target.value, "source");
+                            }}
+                            onFocus={() => onFocus('source')} 
+                            onBlur={() => onBlur('source')}
+                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400"
+                        />
+                        {focusedSource && Object.keys(sourceSuggestions).length > 0 && 
+                            <ul className="absolute w-full bg-gray-700 text-white rounded-md shadow-md mt-2">
+                                {sourceSuggestions.map((station) => (
+                                    <li 
+                                        key={station._id} 
+                                        className="p-2 hover:bg-gray-600 cursor-pointer"
+                                        onClick={() => {
+                                            setSource(station.name);
+                                            setSourceSuggestions([]);
+                                        }}
+                                    >
+                                        {station.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        }
                     </div>
-
-                    <span className='h-full flex justify-center items-center rotate-90 mt-2 md:rotate-0'><FontAwesomeIcon icon={faRightLeft} /></span>
-
+    
+                    {/* Swap Icon */}
+                    <span className="flex justify-center items-center rotate-90 md:rotate-0 text-gray-500 text-2xl">
+                        <FontAwesomeIcon icon={faRightLeft} />
+                    </span>
+    
                     {/* To */}
-                    <div className="w-full md:w-1/5 ">
-                        <label className="text-sm">To</label><br />
+                    <div className="w-full md:w-1/5 relative">
+                        <label className="text-sm text-gray-400">To</label>
                         <input 
                             type="text" 
                             name='destination'
-                            className="w-full border-2 focus:border-b-4 rounded-lg h-12 text-2xl " 
+                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400"
                             value={destination}
-                            onFocus={()=>onFocus('destination')} 
-                            onBlur={()=>onBlur('destination')}
+                            onFocus={() => onFocus('destination')} 
+                            onBlur={() => onBlur('destination')}
                             onChange={(e) => {
                                 setDestination(e.target.value);
-                                fetchSuggestions(e.target.value, "destination");}}/>
-
+                                fetchSuggestions(e.target.value, "destination");
+                            }}
+                        />
                         {focusedDestination && Object.keys(destinationSuggestions).length > 0 &&
-                        <ul className='absolute w-full md:w-1/5 p-5 rounded-3xl shadow-lg shadow-black/50 bg-white'>
-                            {destinationSuggestions.map((station) => (
-                            <li key={station._id} 
-                                onClick={()=> { 
-                                    setDestination(station.name);
-                                    setDestinationSuggestions([])}}>
-                                {station.name}
-                            </li>
-                            ))}
-                        </ul>}
+                            <ul className="absolute w-full bg-gray-700 text-white rounded-md shadow-md mt-2">
+                                {destinationSuggestions.map((station) => (
+                                    <li 
+                                        key={station._id} 
+                                        className="p-2 hover:bg-gray-600 cursor-pointer"
+                                        onClick={() => { 
+                                            setDestination(station.name);
+                                            setDestinationSuggestions([]);
+                                        }}
+                                    >
+                                        {station.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        }
                     </div>
-                    {/* Show suggestions for destination */}
-
+    
                     {/* Date */}
                     <div className="w-full md:w-1/5">
-                        <label className="text-sm">Date</label><br />
+                        <label className="text-sm text-gray-400">Date</label>
                         <input 
                             type="date"
                             name='date'
                             min={min} 
                             value={searchFormData.date}
-                            onChange={(e)=>handleOnChange(e)}
-                            className="w-full border-2 focus:border-b-4 rounded-lg h-12  text-2xl" 
-                            />
+                            onChange={(e) => handleOnChange(e)}
+                            className="w-full h-12 text-xl bg-gray-800 text-white border-b-2 border-gray-500 outline-none focus:border-indigo-400"
+                        />
                     </div>
-
-                    {/* Classess */}
+    
+                    {/* Classes */}
                     <div className="w-full md:w-1/5">
-                        <label className="text-sm">Classses</label><br />
+                        <label className="text-sm text-gray-400">Class</label>
                         <select 
-                            type="string" 
                             name='classes'
                             value={searchFormData.classes} 
-                            onChange={(e)=>handleOnChange(e)}
-                            className="w-full border-2  focus:border-b-4 rounded-lg h-12  text-2xl"
+                            onChange={(e) => handleOnChange(e)}
+                            className="w-full h-12 text-xl bg-gray-800 text-white border-b-2 border-gray-500 outline-none focus:border-indigo-400"
                         >
-                            <option value="SL">SLEEPER</option>
-                            <option value="AC2">AC 2 </option>
-                            <option value="AC3">AC 3 </option>
+                            <option className='bg-gray-900' value="SL">Sleeper</option>
+                            <option className='bg-gray-900' value="AC2">AC 2</option>
+                            <option className='bg-gray-900' value="AC3">AC 3</option>
                         </select>
                     </div>
                 </div>
-
-                {/* search button */}
+    
+                {/* Search Button */}
                 <button
-                    type='sumbit'
-                    className={`w-[200px] p-4 m-4 text-white font-bold rounded ${loading ? 'bg-gray-400' : 'bg-orange-500 hover:bg-orange-700'}`}
-                >{loading ? 'SEARCHING...' : 'SEARCH'}</button>
-                <h3 className='text-red-500 font-bold self-center text-2xl'>{error}</h3>
-
+                    type='submit'
+                    className={`w-48 py-3 font-bold rounded-lg transition-all ${loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-500 hover:bg-indigo-700'}`}
+                    disabled={loading}
+                >
+                    {loading ? 'SEARCHING...' : 'SEARCH'}
+                </button>
+    
+                {/* Error Message */}
+                {error && <h3 className="text-red-500 font-semibold text-xl">{error}</h3>}
             </form>
-
-            
         </div>
-        
-    )
+    );
+    
 }
 export default Search

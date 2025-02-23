@@ -34,100 +34,101 @@ const PnrStatus = () => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col items-center">
-            <h1 className="text-3xl font-medium mt-4">Get Your PNR Status</h1>
-
+        <div className="w-full min-h-screen flex flex-col items-center bg-gray-900 text-white py-6">
+            <h1 className="text-3xl font-semibold mt-4 text-indigo-400">🚆 Get Your PNR Status</h1>
+    
             {/* Form to enter PNR */}
             <form
-                className="w-9/10 h-50 text-white md:w-7/10 p-4 rounded-2xl flex flex-col justify-around items-center bg-gray-950 my-4"
+                className="w-11/12 md:w-3/5 lg:w-2/5 text-white p-6 rounded-2xl flex flex-col gap-4 items-center shadow-lg mt-6"
                 onSubmit={getPnr}
             >
-                <label htmlFor="pnr_no"><strong>Enter PNR no:</strong></label>
+                <label htmlFor="pnr_no" className="text-lg font-medium">Enter PNR No:</label>
                 <input
                     type="text"
                     name="pnr_no"
-                    className="rounded bg-gray-500 p-2 w-9/10"
+                    className="rounded-md bg-gray-700 text-white p-3 w-full focus:ring-2 focus:ring-indigo-500 outline-none"
                     required
                 />
                 <input
-                    className="bg-indigo-500 shadow-lg shadow-indigo-500/50 py-2 px-5 rounded-lg"
+                    className="bg-indigo-500 text-white py-2 px-6 rounded-lg shadow-lg transition-all hover:bg-indigo-600 cursor-pointer hover:shadow-indigo-500/50"
                     type="submit"
                     value="Check Status"
                 />
             </form>
-
+    
             {/* Error Message */}
-            {error && <div className="text-center text-red-500 mt-10">{error}</div>}
-
+            {error && <div className="text-center text-red-500 mt-4">{error}</div>}
+    
             {/* Show details if available */}
             {details && (
-                <div className="w-full md:w-7/10 flex-col flex items-center p-4">
-                    <h3 className=""><strong>Train Details</strong></h3>
-                    <div className="flex flex-col items-center mt-2 mb-5 w-full bg-white rounded-lg p-2.5">
-                        {/* Train Header */}
-                        <div className="w-full bg-orange-200 text-blue-800">
-                            <div className="font-semibold text-2xl">
-                                <span className="mx-2">{details.trainName}</span> |
-                                <span className="mx-2">{details.trainNumber}</span>
+                <div className="w-full md:w-4/5 lg:w-3/5 flex flex-col items-center p-4 text-white mt-6">
+                    {/* Train Details Card */}
+                    <div className="w-full bg-gray-800 text-white p-5 rounded-lg shadow-md border border-gray-700">
+                        <h3 className="text-xl font-semibold text-center text-indigo-400">🚆 Train Details</h3>
+                        <div className="bg-gray-700 text-indigo-300 text-center p-3 mt-3 rounded-md">
+                            <p className="text-2xl font-bold">{details.trainName} | {details.trainNumber}</p>
+                            <p className="font-medium text-lg">{new Date(details.booking_date).toISOString().split('T')[0]} | {details.class}</p>
+                        </div>
+    
+                        <div className="flex justify-between bg-gray-600 p-4 mt-4 rounded-lg">
+                            <div className="text-center">
+                                <span className="font-medium">{details.from.name}</span>
+                                <p className="text-sm text-gray-300">({details.from.time})</p>
                             </div>
-                            <div className="text-center font-medium">
-                                <span className="mx-2">{new Date(details.booking_date).toISOString().split('T')[0]}</span> |
-                                <span className="mx-2">{details.class}</span>
+                            <span className="text-xl font-bold text-gray-400">➡️</span>
+                            <div className="text-center">
+                                <span className="font-medium">{details.to.name}</span>
+                                <p className="text-sm text-gray-300">({details.to.time})</p>
                             </div>
                         </div>
-
-                        {/* Location & Time */}
-                        <div className="flex flex-row justify-between bg-orange-100 w-full px-5">
-                            <div>
-                                <span className="font-medium">{details.from.name}</span><br />
-                                <span className="font-light">({details.from.time})</span><br />
-                            </div>
-                            <div>
-                                <span className="font-medium">{details.to.name}</span><br />
-                                <span className="font-light">({details.to.time})</span><br />
-                            </div>
+    
+                        {/* New: Coach, Seat & Status */}
+                        <div className="bg-gray-700 text-center text-white p-3 mt-4 rounded-md">
+                            <p><strong>Coach:</strong> {details.coach}</p>
+                            <p><strong>Seat:</strong> {details.seat}</p>
+                            <p><strong>Status:</strong> <span className="text-green-400">{details.status}</span></p>
                         </div>
                     </div>
-
+    
                     {/* Passenger Details */}
-                    <h3><strong>Passenger Details</strong></h3>
-                    <div className="flex justify-between items-center shadow-md bg-white p-3 mb-2 rounded-lg w-full">
-                        <table className="w-full border-collapse border border-gray-400 text-center">
+                    <div className="w-full bg-gray-800 text-white p-5 rounded-lg shadow-md border border-gray-700 mt-5">
+                        <h3 className="text-xl font-semibold text-center text-indigo-400">🧑 Passenger Details</h3>
+                        <table className="w-full text-center mt-3 border-collapse border border-gray-600">
                             <thead>
-                                <tr>
-                                    <th className="border border-gray-300 w-6/18 p-2 bg-orange-400">Name</th>
-                                    <th className="border border-gray-300 w-2/18 p-2 bg-orange-400">Age</th>
-                                    <th className="border border-gray-300 w-4/18 p-2 bg-orange-400">Gender</th>
-                                    <th className="border border-gray-300 w-4/18 p-2 bg-orange-400">Birth</th>
+                                <tr className="bg-indigo-600 text-white">
+                                    <th className="p-3 border border-gray-500">Name</th>
+                                    <th className="p-3 border border-gray-500">Age</th>
+                                    <th className="p-3 border border-gray-500">Gender</th>
+                                    <th className="p-3 border border-gray-500">Birth</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="border border-gray-300 px-2">{details.passenger.name}</td>
-                                    <td className="border border-gray-300 px-2">{details.passenger.age}</td>
-                                    <td className="border border-gray-300 px-2">{details.passenger.gender}</td>
-                                    <td className="border border-gray-300 px-2">{details.passenger.birth}</td>
+                                <tr className="bg-gray-700">
+                                    <td className="p-3 border border-gray-500">{details.passenger.name}</td>
+                                    <td className="p-3 border border-gray-500">{details.passenger.age}</td>
+                                    <td className="p-3 border border-gray-500">{details.passenger.gender}</td>
+                                    <td className="p-3 border border-gray-500">{details.passenger.birth}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
+    
                     {/* Contact Details */}
-                    <h3><strong>Contact Details</strong></h3>
-                    <div className="w-full flex justify-between items-center bg-white p-3 mb-2 rounded-lg shadow-md">
-                        <table className="w-full border-collapse border border-gray-400 text-center">
+                    <div className="w-full bg-gray-800 text-white p-5 rounded-lg shadow-md border border-gray-700 mt-5">
+                        <h3 className="text-xl font-semibold text-center text-indigo-400">📞 Contact Details</h3>
+                        <table className="w-full text-center mt-3 border-collapse border border-gray-600">
                             <tbody>
-                                <tr>
-                                    <th className="border border-gray-300 w-4/18 p-2 bg-orange-400">Name</th>
-                                    <td className="border border-gray-300 px-2 p-1">{details.contact.name}</td>
+                                <tr className="bg-gray-700">
+                                    <th className="p-3 border border-gray-500 bg-indigo-600 text-white">Name</th>
+                                    <td className="p-3 border border-gray-500">{details.contact.name}</td>
                                 </tr>
                                 <tr>
-                                    <th className="border border-gray-300 w-4/18 p-2 bg-orange-400">Email</th>
-                                    <td className="border border-gray-300 px-2 p-1">{details.contact.email}</td>
+                                    <th className="p-3 border border-gray-500 bg-indigo-600 text-white">Email</th>
+                                    <td className="p-3 border border-gray-500">{details.contact.email}</td>
                                 </tr>
-                                <tr>
-                                    <th className="border border-gray-300 w-4/18 p-2 bg-orange-400">Phone</th>
-                                    <td className="border border-gray-300 px-2 p-1">{details.contact.phoneno}</td>
+                                <tr className="bg-gray-700">
+                                    <th className="p-3 border border-gray-500 bg-indigo-600 text-white">Phone</th>
+                                    <td className="p-3 border border-gray-500">{details.contact.phoneno}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -136,6 +137,9 @@ const PnrStatus = () => {
             )}
         </div>
     );
+    
+    
+    
 };
 
 export default PnrStatus;
