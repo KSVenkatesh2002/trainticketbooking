@@ -17,8 +17,9 @@ const cleanupExpiredBookings = async () => {
             const destinationStation = train.stations.find(station => station.number === booking.to_station.no);
 
             if (destinationStation && destinationStation.arrival) {
+                console.log(destinationStation)
                 const arrivalDateTime = new Date(booking.booking_date);
-                const [hours, minutes] = destinationStation.arrival.split(':').map(Number);
+                const [hours, minutes] = destinationStation.arrival.split(':')[0].split(':').map(Number);
                 arrivalDateTime.setHours(hours);
                 arrivalDateTime.setMinutes(minutes);
 
