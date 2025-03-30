@@ -5,21 +5,25 @@ import Train from '../models/train.model.js';
 const cleanupExpiredBookings = async () => {
     try {
         const now = new Date();
-
         // Fetch all bookings
         const bookings = await Booking.find({});
-
+        
         for (const booking of bookings) {
             const train = await Train.findById(booking.train_id);
 
-            if (!train) continue; // Skip if train not found
+            if (!train) {
+                await Booking.findByIdAndDelete(booking._id);
+                    console.log(`❌ removed booking bcz train not found: ${booking}`);
+                    continue;
+            } // Skip if train not found
 
             const destinationStation = train.stations.find(station => station.number === booking.to_station.no);
 
             if (destinationStation && destinationStation.arrival) {
-                console.log(destinationStation)
+                // console.log(destinationStation)
                 const arrivalDateTime = new Date(booking.booking_date);
-                const [hours, minutes] = destinationStation.arrival.split(':')[0].split(':').map(Number);
+                const [hours, minutes] = destinationStation.arrival.split(' ')[0].split(':').map(Number);
+                // console.log(hours, minutes)
                 arrivalDateTime.setHours(hours);
                 arrivalDateTime.setMinutes(minutes);
 
@@ -35,6 +39,6 @@ const cleanupExpiredBookings = async () => {
 };
 
 // Run cleanup every hour (adjust as needed)
-cron.schedule('0 * * * *', cleanupExpiredBookings);
+cron.schedule('0 */5 * * *', cleanupExpiredBookings);
 
 export default cleanupExpiredBookings;
