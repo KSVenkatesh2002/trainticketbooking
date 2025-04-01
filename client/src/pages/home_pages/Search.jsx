@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { setTrainsList} from '../../redux/slices/trainSlice';
 import { useDispatch } from 'react-redux';
@@ -81,11 +81,11 @@ function Search() {
 
     // Fetch station suggestions
     const fetchSuggestions = async (query, type) => {
-        if (query === '') {
-            if (type === "source") setSourceSuggestions([]);
-            else setDestinationSuggestions([]);
-            return;
-        }
+        // if (query === '') {
+        //     if (type === "source") setSourceSuggestions([]);
+        //     else setDestinationSuggestions([]);
+        //     return;
+        // }
     
         try {
             const response = await fetch(`/api/train/address-list?address=${query}`);
@@ -105,10 +105,15 @@ function Search() {
             else setDestinationSuggestions([]);
         }
     };
+    // Fetch station suggestions at initial render
+    useEffect(() => {
+        fetchSuggestions('', "source");
+        fetchSuggestions('', "destination");
+    },[])
     
 
     return (
-        <div className="min-h-screen bg-gray-900 w-full py-10 flex flex-col items-center">
+        <div className="min-h-screen bg-gray-900 w-full py-10 flex flex-col items-center  overflow-y-scroll hide-scrollbar">
             
             {/* Train Cover Image */}
             <div className="relative w-11/12 md:w-9/10 md:rounded-[4rem] rounded-2xl h-56 md:h-96 mx-auto shadow-2xl overflow-hidden">
@@ -138,15 +143,15 @@ function Search() {
             {/* Search Form */}
             <form 
                 onSubmit={(e) => handleSumbit(e)}
-                className="w-11/12 md:w-4/5 lg:w-3/5 bg-gray-800 text-white p-6 mt-6 rounded-2xl shadow-lg flex flex-col items-center gap-6"
+                className="w-11/12 md:w-4/5 lg:w-3/5  bg-gray-800 text-white p-6 mt-6 rounded-2xl shadow-lg flex flex-col items-center gap-6"
             >
                 <h2 className="text-2xl font-semibold text-indigo-400">🚆 Search for a Train</h2>
     
                 {/* Inputs Container */}
-                <div className="w-full flex flex-col md:flex-row justify-between gap-6">
+                <div className="w-full flex flex-col md:flex-row justify-between gap-6 h-full">
                     
                     {/* From */}
-                    <div className="w-full md:w-1/5 relative">
+                    <div className="w-full md:w-1/5 relative z-11">
                         <label className="text-sm text-gray-400">From</label>
                         <input 
                             type="text" 
@@ -158,10 +163,10 @@ function Search() {
                             }}
                             onFocus={() => onFocus('source')} 
                             onBlur={() => onBlur('source')}
-                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400"
+                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400 hover:border-indigo-400 focus:border-b-4"
                         />
                         {focusedSource && Object.keys(sourceSuggestions).length > 0 && 
-                            <ul className="absolute w-full bg-gray-700 text-white rounded-md shadow-md mt-2">
+                            <ul className="absolute w-full max-h-fit overflow-auto h-60 bg-gray-700 text-white rounded-md shadow-md mt-2">
                                 {sourceSuggestions.map((station) => (
                                     <li 
                                         key={station._id} 
@@ -184,12 +189,12 @@ function Search() {
                     </span>
     
                     {/* To */}
-                    <div className="w-full md:w-1/5 relative">
+                    <div className="w-full md:w-1/5 relative z-10">
                         <label className="text-sm text-gray-400">To</label>
                         <input 
                             type="text" 
                             name='destination'
-                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400"
+                            className="w-full border-b-2 border-gray-500 bg-gray-800 text-white h-12 text-xl outline-none focus:border-indigo-400 hover:border-indigo-400 focus:border-b-4"
                             value={destination}
                             onFocus={() => onFocus('destination')} 
                             onBlur={() => onBlur('destination')}
@@ -199,7 +204,7 @@ function Search() {
                             }}
                         />
                         {focusedDestination && Object.keys(destinationSuggestions).length > 0 &&
-                            <ul className="absolute w-full bg-gray-700 text-white rounded-md shadow-md mt-2">
+                            <ul className="absolute w-full bg-gray-700 text-white rounded-md shadow-md mt-2 max-h-fit overflow-auto h-60">
                                 {destinationSuggestions.map((station) => (
                                     <li 
                                         key={station._id} 
@@ -225,7 +230,7 @@ function Search() {
                             min={min} 
                             value={searchFormData.date}
                             onChange={(e) => handleOnChange(e)}
-                            className="w-full h-12 text-xl bg-gray-800 text-white border-b-2 border-gray-500 outline-none focus:border-indigo-400"
+                            className="w-full h-12 text-xl bg-gray-800 text-white border-b-2 border-gray-500 outline-none focus:border-indigo-400 scroll-auto"
                         />
                     </div>
     
