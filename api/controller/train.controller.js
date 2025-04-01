@@ -48,11 +48,18 @@ export const trainUpload = async (req, res, next) => {
 export const trainAddressList = async (req, res, next) => {
     const address = req.query.address;
 
-    if (!address) return res.json([]);
     try {
-        const stations = await Station.find({
-            name: { $regex: new RegExp(address, "i") }
-        }).limit(5); // Limit results to 5 suggestionsf
+        let stations;
+
+        if (!address) {
+            // If no address is provided, return all stations
+            stations = await Station.find() // Limiting the result to 5 if no address is provided
+        } else {
+            // If address is provided, search for matching stations
+            stations = await Station.find({
+                name: { $regex: new RegExp(address, "i") }
+            }) // Limiting the result to 5 suggestions
+        }
 
         res.status(200).json(stations);
     } catch (error) {
@@ -60,6 +67,7 @@ export const trainAddressList = async (req, res, next) => {
         next(error);
     }
 }
+
 
 export const searchTrain = async (req, res, next) => {
     const {sourceStation, destinationStation} = req.query

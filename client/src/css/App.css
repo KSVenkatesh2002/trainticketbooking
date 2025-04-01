@@ -35,3 +35,11 @@ body{
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Hides the scrollbar in webkit browsers (Chrome, Safari, Edge) */
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* For Internet Explorer 10+ */
+    scrollbar-width: none;  /* For Firefox */
+}

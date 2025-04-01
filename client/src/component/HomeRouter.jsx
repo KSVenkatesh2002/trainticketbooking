@@ -13,9 +13,7 @@ function Home() {
     
 //
     return (
-        <div className="flex flex-col items-center h-full min-h-screen w-full">
-
-
+        <div className="flex flex-col items-center w-full min-h-screen h-fit bg-gray-900 text-white">
             <div className='w-full min-h-[50px] py-4 flex justify-evenly items-center bg-gray-800 shadow-lg shadow-black/50'>
                 <div className={`flex justify-evenly items-center  p-1 h-9/10 rounded-2xl w-1/5 text-center hover:underline ${nav==='search' && 'shadow-sm shadow-white/50' }`}>
                     <Link to='/search' className={`text-orange-300 ${nav === 'search' && 'text-orange-600' } font-semibold`}>
@@ -45,14 +43,7 @@ function Home() {
                     </Link>
                 </div>
             </div>
-
-
-
-            
-
             <Outlet/>
-            
-            
         </div>
     )
 }
