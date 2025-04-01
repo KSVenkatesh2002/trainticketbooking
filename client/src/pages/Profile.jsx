@@ -24,6 +24,7 @@ const Profile = () => {
     const handlechange = (e) => {
         setformdata({ ...formdata, [e.target.name]: e.target.value })
     }
+
     const handlesubmit = async (e) => {
         e.preventDefault();
         dispatch(start())
@@ -40,15 +41,13 @@ const Profile = () => {
                 dispatch(failure(data.message))
                 return;
             }
-            console.log('updated',data)
             dispatch(success(data))
             navigate('/')
         } catch (err) {
             dispatch(failure(err.message))
         }
-        
-
     }
+
     const handleSignout = async () => {
         dispatch(start())
         try {
@@ -67,78 +66,80 @@ const Profile = () => {
         } catch (error) {
             dispatch(failure(error))
         }
-        
-
-
     }
 
     return (
-        <div className="flex flex-col items-center h-[92vh] w-screen justify-center bg-gradient-to-br from-[rgba(245,227,190,0.5)] via-[rgba(233,182,139,0.55)] to-[rgba(254,188,116,0.55)]">
-            <h2 className="mb-3.5 text-2xl font-semibold">Update Profile</h2>
-            <form onSubmit={handlesubmit} className="flex flex-col items-center w-full max-w-lg">
-                
-                {/* <img src={currentUser.photoURL} alt="dp" onClick={() => fileref.current.click()} className='mb-4 w-40 rounded-full bg-cover cursor-pointer' /> */}
-                
-                <label className="absolute left-[-1000000px]" htmlFor="username">Name</label>
-                <input
-                    type="text"
-                    name="username"
-                    value={formdata.username}
-                    placeholder="Username"
-                    required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
-                    onChange={handlechange}
-                />
-                
-                <label className="absolute left-[-1000000px]" htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={formdata.email}
-                    placeholder="Email"
-                    required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
-                    onChange={handlechange}
-                />
-                
-                <label className="absolute left-[-1000000px]" htmlFor="dob">Date of Birth</label>
-                <input
-                    type="date"
-                    name="dob"
-                    value={formdata.dob}
-                    max={max}
-                    required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
-                    onChange={handlechange}
-                />
-                
-                <label className="absolute left-[-1000000px]" htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    value={formdata.password}
-                    placeholder="Password"
-                    required
-                    className="h-[6vh] w-[70vw] max-w-[400px] min-h-[40px] border-2 border-dotted border-black rounded-lg bg-gradient-to-b from-[#ffad00] via-[#e89149] to-[#fab972] text-[1.2rem] pl-2 placeholder-black/60 mb-3"
-                    onChange={handlechange}
-                />
-                
-                <input
-                    type="submit"
-                    value={loading ? 'Loading...' : 'Update'}
-                    className={`h-[6vh] w-[70vw] max-w-[200px] min-h-[40px] border-2 rounded-full text-white cursor-pointer ${loading ? 'bg-gray-400' : 'bg-[#09122C]'}`}
-                />
-                
-                <input
-                    type="button"
-                    onClick={handleSignout}
-                    value={loading ? 'Loading...' : 'Sign Out'}
-                    className={`h-[6vh] w-[70vw] max-w-[200px] min-h-[40px] border-2 rounded-full text-white cursor-pointer mt-4 ${loading ? 'bg-gray-400' : 'bg-red-600'}`}
-                />
-            </form>
+        <div className="flex items-center justify-center h-screen bg-[#09122C] text-white">
+            <div className="w-full max-w-md p-6 bg-[#151D3B] rounded-lg shadow-lg">
+                <h2 className="text-2xl font-semibold text-center mb-4">Update Profile</h2>
+                <form onSubmit={handlesubmit} className="flex flex-col gap-4">
+                    
+                    <label className="text-sm" htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        value={formdata.username}
+                        placeholder="Username"
+                        required
+                        className="p-2 rounded bg-[#1F2A49] border border-gray-600 text-white"
+                        onChange={handlechange}
+                    />
+                    
+                    <label className="text-sm" htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formdata.email}
+                        placeholder="Email"
+                        required
+                        className="p-2 rounded bg-[#1F2A49] border border-gray-600 text-white"
+                        onChange={handlechange}
+                    />
+                    
+                    <label className="text-sm" htmlFor="dob">Date of Birth</label>
+                    <input
+                        type="date"
+                        name="dob"
+                        value={formdata.dob}
+                        max={max}
+                        required
+                        className="p-2 rounded bg-[#1F2A49] border border-gray-600 text-white"
+                        onChange={handlechange}
+                    />
+                    
+                    <label className="text-sm" htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={formdata.password}
+                        placeholder="Password"
+                        required
+                        className="p-2 rounded bg-[#1F2A49] border border-gray-600 text-white"
+                        onChange={handlechange}
+                    />
+                    
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="p-2 bg-[#0084FF] rounded text-white font-semibold hover:bg-[#005FCC] disabled:bg-gray-500"
+                    >
+                        {loading ? 'Loading...' : 'Update'}
+                    </button>
 
-            {error && <span className="text-red-500 text-xl font-semibold mt-4">{error}</span>}
+                    <button
+                        type="button"
+                        onClick={handleSignout}
+                        disabled={loading}
+                        className="p-2 bg-red-600 rounded text-white font-semibold hover:bg-red-700 disabled:bg-gray-500"
+                    >
+                        {loading ? 'Loading...' : 'Sign Out'}
+                    </button>
+
+                    {error && <span className="text-red-400 text-center">{error}</span>}
+                </form>
+            </div>
         </div>
     );
 }
-export default Profile
+
+export default Profile;
