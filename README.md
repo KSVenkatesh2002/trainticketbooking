@@ -119,8 +119,4 @@ npm run build
 - No map or location APIs used.
 - This is a portfolio/demo project. Use responsibly.
 
----
 
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
