@@ -23,7 +23,7 @@ const HomeRouter = lazy(() => import('./component/HomeRouter'));
 function App() {
     return (
         <BrowserRouter>
-            <Suspense fallback={<div className=''>Loading...</div>}>
+            <Suspense fallback={<div className='h-screen w-screen flex justify-center items-center'>Loading...</div>}>
                 <Header/>
                 <Routes>
                     {/* home page */}
