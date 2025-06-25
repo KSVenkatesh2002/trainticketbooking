@@ -34,7 +34,7 @@ const PnrStatus = () => {
     };
 
     return (
-        <div className="w-full min-h-screen flex flex-col items-center bg-gray-900 text-white py-6">
+        <div className="w-full h-auto flex flex-col items-center bg-gray-900 text-white py-6">
             <h1 className="text-3xl font-semibold mt-4 text-indigo-400">🚆 Get Your PNR Status</h1>
     
             {/* Form to enter PNR */}

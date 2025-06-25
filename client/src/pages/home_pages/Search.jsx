@@ -113,10 +113,10 @@ function Search() {
     
 
     return (
-        <div className="min-h-screen bg-gray-900 w-full py-10 flex flex-col items-center  overflow-y-scroll hide-scrollbar">
+        <div className="min-h-[calc(100vh-16vh)] bg-gray-900 w-full py-10 flex flex-col items-center  overflow-y-scroll hide-scrollbar">
             
             {/* Train Cover Image */}
-            <div className="relative w-11/12 md:w-9/10 md:rounded-[4rem] rounded-2xl h-56 md:h-96 mx-auto shadow-2xl overflow-hidden">
+            <div className="relative w-11/12 md:w-9/10 md:rounded-[4rem] rounded-2xl min-h-56 md:h-96 mx-auto shadow-2xl overflow-hidden flex items-center">
                 {/* Background Image */}
                 <div 
                     className="absolute inset-0 bg-cover bg-center transition-all duration-500 filter brightness-85"

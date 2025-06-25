@@ -26,7 +26,7 @@ const TrainInfo = () => {
     };
 
     return (
-        <div className="w-screen min-h-screen flex flex-col items-center bg-gray-900 text-white">
+        <div className="w-screen flex flex-col items-center bg-gray-900 text-white">
             <h1 className="text-3xl font-medium my-4">Search Train</h1>
             <form onSubmit={handleSearch} className="bg-gray-950 p-4 w-9/10 rounded-lg md:w-1/2 lg:w-1/3">
                 <input

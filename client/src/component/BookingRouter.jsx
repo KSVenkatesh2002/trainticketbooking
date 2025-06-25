@@ -6,7 +6,7 @@ const BookingRouter = () => {
     const position = location.pathname.split('/').pop(); // Extract last part of URL
 
     return (
-        <div className='w-full min-h-screen'>
+        <div className='w-full min-h-[calc(100vh-8vh)]'>
             {/* Progress Navigation */}
             <div className='flex justify-center w-full items-center my-4'>
                 <span className={`bg-orange-500 rounded-full w-10 h-10 flex items-center justify-center border`}>

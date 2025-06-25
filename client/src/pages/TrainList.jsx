@@ -95,7 +95,7 @@ function TrainList() {
     
 
     return (
-        <div className='flex flex-col h-full min-h-screen w-full items-center bg-gray-950'>
+        <div className='flex flex-col h-full min-h-screen w-full items-center bg-gray-900'>
 
             {/* date changing buttons */}
             <div className="w-full flex justify-between md:max-w-[70vw]">
@@ -129,7 +129,7 @@ function TrainList() {
                 <ol className='w-full flex flex-wrap p-2 justify-evenly items-center'>
                 {trainsOnDate.map((t) => (
                     
-                    <li key={t._id} className={`w-full md:w-9/19 flex border flex-col bg-gray-800 items-center mt-10 text-gray-300`}>
+                    <li key={t._id} className={`w-full py-2 md:w-9/19 flex border flex-col bg-gray-800 items-center mt-10 text-gray-300 rounded-lg`}>
 
                         {/* train header */}
                         <div className='w-full  text-blue-400'>

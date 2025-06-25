@@ -81,7 +81,7 @@ export default function Booking() {
     }
 
     return (
-        <div className='min-h-screen h-full p-3 pb-7 w-full flex flex-col justify-center items-center overflow-hidde bg-gray-950'>
+        <div className='min-h-[calc(100vh-16vh)] h-full p-3 pb-7 w-full 2xl:px-40 flex flex-col justify-center items-center bg-gray-950'>
 
             {/* show train data */}
             <div className='flex flex-col items-center mt-2 mb-5 p-2 w-full bg-gray-600 border text-white rounded-lg md:w-1/2'>
@@ -109,10 +109,10 @@ export default function Booking() {
             </div>
 
             {/* passenger and contact */}
-            <div className='flex flex-col items-center w-full '>
+            <div className='flex flex-col lg:flex-row items-center w-full '>
                 
                 {/*  passenger */}
-                <div className='flex flex-col items-center w-full my-2'>
+                <div className='flex flex-col items-center w-full my-2 lg:w-2/3'>
 
                     <div className='mb-2 self-start text-lg font-bold text-white'>Passenger(s) Details</div>
 
@@ -221,18 +221,18 @@ export default function Booking() {
                 </div>
 
                 {/*  contact data */}
-                <div className='flex flex-col items-center w-full  my-2 justify-center'>
+                <div className=' w-full p-2 lg:w-1/3'>
 
                     <div className='mb-2 self-start text-lg font-bold text-white'>Contact Details</div>
 
                     {displayContactForm && 
                     <form 
-                        className='rounded-lg mb-3 w-full flex-row flex-wrap p-4 bg-slate-900 text-white shadow-md flex justify-around'
+                        className='rounded-lg mb-3 w-full flex-row lg:flex-col flex-wrap p-4 bg-slate-900 text-white shadow-md flex justify-around'
                         onSubmit={(e) => {
                             e.preventDefault();
                             dispatch(setDisplayContactForm())
                         }}>
-                        <label className='mb-2 w-full md:w-1/5'>
+                        <label className='mb-2 w-full md:w-1/5 lg:w-full'>
                             <span className='text-sm'>Name:</span><br />
                             <input 
                                 className='w-full bg-slate-800 p-1 border border-gray-300 rounded ' 
@@ -249,7 +249,7 @@ export default function Booking() {
                                 }} 
                                 required />
                         </label>
-                        <label className='mb-2 w-full md:w-1/5'>
+                        <label className='mb-2 w-full md:w-1/5 lg:w-full'>
                             <span className='text-sm'>Email</span><br />
                             <input 
                                 className='w-full  bg-slate-800  min-w-2/5 p-1 border border-gray-300 rounded ' 
@@ -266,7 +266,7 @@ export default function Booking() {
                                 }}
                                 required />
                         </label>
-                        <label className='mb-2 w-full md:w-1/5'>
+                        <label className='mb-2 w-full md:w-1/5 lg:w-full'>
                             <span className='text-sm'>Phone No:</span><br />
                             <div className='w-full'>
                                 <div className='w-2/12 p-1 border border-gray-200 rounded-l inline-block text-center bg-gray-600'>91</div>
@@ -287,7 +287,7 @@ export default function Booking() {
                                     required />
                             </div>
                         </label>
-                        <button type="submit" className='flex items-center justify-center bg-slate-600 text-white p-2 rounded-lg w-full md:w-1/5'>
+                        <button type="submit" className='flex items-center justify-center bg-slate-600 text-white p-2 rounded-lg w-full md:w-1/5 lg:w-full'>
                             <FontAwesomeIcon className='mr-2' icon={faFloppyDisk} /> Save
                         </button>
                     </form>}

@@ -42,7 +42,7 @@ function BookingList() {
     if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
     return (
-        <div className="flex flex-col w-full pt-2 items-center min-h-screen bg-gray-900 p-4">
+        <div className="flex flex-col w-full pt-2 items-center  bg-gray-900 p-4">
             <h1 className="text-2xl md:text-3xl font-semibold text-white mb-6">Your Bookings</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
     {bookings.length > 0 ? (
