@@ -3,7 +3,7 @@ import { Suspense, lazy } from 'react';
 
 // Lazy loading components
 const Header = lazy(() => import('./component/Header'));
-const Home = lazy(() => import('./pages/Home'));
+const Home = () => import('./pages/Home');
 const About = lazy(() => import('./pages/About'));
 const Auth = lazy(() => import('./component/Auth'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -14,7 +14,7 @@ const Payment = lazy(() => import('./pages/booking_pages/Payment'));
 const TrainInfo = lazy(() => import('./pages/home_pages/TrainInfo'));
 const PnrStatus = lazy(() => import('./pages/home_pages/PnrStatus'));
 const BookingList = lazy(() => import('./pages/home_pages/BookingList'));
-const Search = lazy(() => import('./pages/home_pages/Search'));
+const Search = () => import('./pages/home_pages/Search');
 const Signup = lazy(() => import('./pages/auth_pages/Signup'))
 const Login = lazy(() => import('./pages/auth_pages/Login'));
 const BookingRouter = lazy(() => import('./component/BookingRouter'));
@@ -23,7 +23,7 @@ const HomeRouter = lazy(() => import('./component/HomeRouter'));
 function App() {
     return (
         <BrowserRouter>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className='h-screen w-screen flex justify-center items-center'>Loading...</div>}>
                 <Header/>
                 <Routes>
                     {/* home page */}
