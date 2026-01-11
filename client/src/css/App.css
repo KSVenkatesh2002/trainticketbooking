@@ -1,45 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap");
 @import "tailwindcss";
-body{
-    margin: 0;
-    padding: 0;
-    font-family: "Dosis", serif;
-    font-size: 1.2rem;
-    background: #e5e7eb;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Dosis", serif;
+  font-size: 1.2rem;
+  background: var(--color-slate-950);
 }
 .input-field {
-    @apply h-10 w-full my-2 rounded-md focus:outline-0 px-3 bg-gray-700 text-white transition-all;
+  @apply h-10 w-full my-2 rounded-md focus:outline-0 px-3 bg-gray-700 text-white transition-all;
 }
 
 .btn-submit {
-    @apply h-10 bg-blue-500 rounded-md text-white hover:bg-blue-600 transition-all cursor-pointer;
+  @apply h-10 bg-blue-500 rounded-md text-white hover:bg-blue-600 transition-all cursor-pointer;
 }
 
 /* Auth.css */
 .fade-slide-enter {
-    opacity: 0;
-    transform: translateX(100%);
+  opacity: 0;
+  transform: translateX(100%);
 }
 .fade-slide-enter-active {
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .fade-slide-exit {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 .fade-slide-exit-active {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Hides the scrollbar in webkit browsers (Chrome, Safari, Edge) */
+  display: none; /* Hides the scrollbar in webkit browsers (Chrome, Safari, Edge) */
 }
 
 .hide-scrollbar {
-    -ms-overflow-style: none;  /* For Internet Explorer 10+ */
-    scrollbar-width: none;  /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer 10+ */
+  scrollbar-width: none; /* For Firefox */
 }
